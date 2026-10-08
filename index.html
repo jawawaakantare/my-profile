@@ -7,16 +7,37 @@
   <title>じゃわわ (あかんたれ) | My little corner</title>
   <meta name="description" content="じゃわわ (あかんたれ)のプロフィールとSNSリンク、制作物や写真をまとめた個人サイトです。">
   <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#f6f5fa" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#090d18" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f2faff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#071426" media="(prefers-color-scheme: dark)">
+  <script src="theme.js"></script>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
 <body>
+  <!-- 装飾専用の固定背景。本文・操作・読み上げには影響しません。 -->
+  <div class="ambient-background" aria-hidden="true" inert>
+    <div class="ambient-grid ambient-grid--far"></div>
+    <div class="ambient-grid ambient-grid--near"></div>
+    <div class="ambient-orbit ambient-orbit--sky"></div>
+    <div class="ambient-orbit ambient-orbit--horizon"></div>
+    <div class="ambient-particles">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="ambient-beam ambient-beam--first"></div>
+    <div class="ambient-beam ambient-beam--second"></div>
+    <div class="ambient-telemetry"><span>SIGNAL / 02.04</span><span>FLOW — MEMORY STREAM</span><span>SYSTEM ONLINE</span></div>
+  </div>
   <div class="page">
     <header class="site-header">
       <a class="wordmark" href="#profile" aria-label="プロフィールへ">jawawa<span class="brand-dot">.</span></a>
-      <span class="header-note">MY LITTLE CORNER</span>
+      <div class="header-controls">
+        <span class="header-note">MY LITTLE CORNER</span>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="ダークモードに切り替える" aria-pressed="false" hidden>
+          <span class="theme-icon theme-icon--sun" aria-hidden="true">☀</span>
+          <span class="theme-icon theme-icon--moon" aria-hidden="true">☾</span>
+        </button>
+      </div>
     </header>
 
     <main>

@@ -2,7 +2,7 @@
    ライトモードのアクセント文字は、白背景でも読めるよう濃い色にします。 */
 :root {
   color-scheme: light;
-  --background: #f6f5fa;
+  --background: #f2faff;
   --surface: #ffffff;
   --text: #231b36;
   --muted: #625970;
@@ -39,12 +39,49 @@
   --gallery-background: #eeedf2;
 }
 
-/* 端末がダークモードのときだけ、色を上書きします。
-   設定が変わるとブラウザーが自動で切り替えるため、JavaScriptは不要です。 */
+/* 保存された手動テーマを優先。JavaScript無効時はOS設定に追従します。 */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #071426;
+  --surface: #131a2b;
+  --text: #eef0ff;
+  --muted: #b4b6cd;
+  --accent: #35efff;
+  --magenta: #ff6bd8;
+  --purple: #b99aff;
+  --neon-cyan: #35efff;
+  --neon-magenta: #ff47ce;
+  --neon-purple: #a66bff;
+  --border: #383450;
+  --cyan-border: #286477;
+  --magenta-border: #71335f;
+  --purple-border: #55417e;
+  --cyan-glow: #35efff20;
+  --magenta-glow: #ff47ce20;
+  --purple-glow: #a66bff24;
+  --avatar-background: #132c3f;
+  --icon-background: #142b39;
+  --magenta-background: #30182e;
+  --purple-background: #241c3e;
+  --status-background: #241c3e;
+  --art-blue: #0b3445;
+  --art-peach: #371343;
+  --art-blue-gradient: linear-gradient(125deg, #0b3445 0%, #192557 55%, #42185d 100%);
+  --art-peach-gradient: linear-gradient(125deg, #371343 0%, #2d1b57 55%, #103c4b 100%);
+  --art-grid: #35efff12;
+  --art-number: #b4b6cd;
+  --art-window-border: #35efff;
+  --art-window-background: #101f36;
+  --art-window-shadow: #361b68;
+  --art-window-line: #b99aff;
+  --art-orbit-line: #ff6bd8;
+  --art-orbit-fill: #2d1b57;
+  --gallery-background: #05070c;
+}
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
     color-scheme: dark;
-    --background: #090d18;
+    --background: #071426;
     --surface: #131a2b;
     --text: #eef0ff;
     --muted: #b4b6cd;
@@ -85,6 +122,7 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
+  isolation: isolate;
   margin: 0;
   background: var(--background);
   color: var(--text);
@@ -95,7 +133,7 @@ body {
 a { color: inherit; }
 /* キーボード操作でも、選択中のリンクがわかるようにします。 */
 a:focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
-.page { width: min(100% - 40px, 680px); margin-inline: auto; }
+.page { position: relative; z-index: 1; width: min(100% - 40px, 680px); margin-inline: auto; }
 .site-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 26px; border-bottom: 1px solid var(--border); }
 .wordmark { font-size: 22px; font-weight: 800; letter-spacing: -1px; text-decoration: none; color: var(--purple); }
 .brand-dot, .name-dot, .section-heading h2 span { color: var(--magenta); text-shadow: 0 0 12px var(--magenta-glow); }
@@ -219,4 +257,137 @@ body.photo-open { overflow: hidden; }
 }
 @media (prefers-reduced-motion: reduce) {
   .gallery-control, .gallery-playback { transition: none; }
+}
+
+/* Y2Kの透明なデジタル空間。固定レイヤーをtransform / opacityだけで動かします。 */
+.ambient-background {
+  --ambient-line: #258ac41c;
+  --ambient-ring: #319bd12e;
+  --ambient-light: #ffffff;
+  --ambient-particle: #39aeca;
+  --ambient-label: #176b952b;
+  --ambient-veil: #f2faffdf;
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  contain: strict;
+  background:
+    radial-gradient(ellipse at 84% 12%, #ffffffed 0%, #bceeff80 24%, transparent 58%),
+    radial-gradient(ellipse at 4% 82%, #d0ceff66, transparent 57%),
+    linear-gradient(155deg, #edfaff 0%, #e5f5ff 45%, #f3f5ff 100%);
+}
+/* 本文の背面には薄い幕を置き、余白に空間の奥行きを残します。 */
+.ambient-background::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--ambient-veil) max(12%, calc(50% - 360px)), var(--ambient-veil) min(88%, calc(50% + 360px)), transparent);
+}
+.ambient-grid {
+  position: absolute;
+  inset: -80px;
+  background-image: linear-gradient(var(--ambient-line) 1px, transparent 1px), linear-gradient(90deg, var(--ambient-line) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+.ambient-grid--far { opacity: .7; animation: ambient-coordinates 112s ease-in-out infinite alternate; }
+.ambient-grid--near { inset: 54% -12% -24%; opacity: .45; background-size: 64px 64px; transform-origin: center top; animation: ambient-horizon 138s ease-in-out infinite alternate; }
+.ambient-orbit { position: absolute; width: clamp(280px, 38vw, 560px); aspect-ratio: 1; border: 1px solid var(--ambient-ring); border-left-color: transparent; border-bottom-color: transparent; border-radius: 50%; animation: ambient-orbit 154s ease-in-out infinite alternate; }
+.ambient-orbit::before { content: ""; position: absolute; inset: 24px; border: 1px solid var(--ambient-ring); border-top-color: transparent; border-radius: 50%; }
+.ambient-orbit::after { content: ""; position: absolute; inset: -12% 50%; width: 1px; background: linear-gradient(transparent, var(--ambient-ring), transparent); transform: rotate(38deg); }
+.ambient-orbit--sky { top: -8%; right: -7%; }
+.ambient-orbit--horizon { bottom: -14%; left: -10%; width: clamp(260px, 30vw, 430px); opacity: .65; animation-duration: 187s; animation-direction: alternate-reverse; }
+.ambient-particles { position: absolute; inset: 0; }
+.ambient-particles span { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: var(--ambient-particle); box-shadow: 0 0 9px 2px var(--ambient-ring); animation: ambient-float 83s ease-in-out infinite alternate; }
+.ambient-particles span:nth-child(1) { left: 8%; top: 28%; animation-delay: -17s; }
+.ambient-particles span:nth-child(2) { left: 21%; top: 67%; animation-duration: 101s; animation-delay: -43s; }
+.ambient-particles span:nth-child(3) { left: 84%; top: 42%; animation-duration: 119s; animation-delay: -31s; }
+.ambient-particles span:nth-child(4) { left: 93%; top: 78%; animation-duration: 97s; animation-delay: -68s; }
+.ambient-particles span:nth-child(5) { left: 36%; top: 14%; animation-duration: 107s; animation-delay: -22s; }
+.ambient-particles span:nth-child(6) { left: 68%; top: 88%; animation-duration: 127s; animation-delay: -56s; }
+.ambient-particles span:nth-child(7) { left: 73%; top: 22%; animation-duration: 91s; animation-delay: -35s; }
+.ambient-particles span:nth-child(8) { left: 14%; top: 89%; animation-duration: 113s; animation-delay: -79s; }
+.ambient-beam { position: absolute; left: 0; width: min(65vw, 900px); height: 90px; background: linear-gradient(180deg, transparent, var(--ambient-light) 49%, transparent 51%), linear-gradient(180deg, transparent, #40dfff24, transparent); opacity: 0; animation: ambient-stream 96s linear infinite; }
+.ambient-beam--first { top: 24%; animation-delay: -37s; }
+.ambient-beam--second { top: 72%; height: 56px; animation-duration: 143s; animation-delay: -98s; }
+.ambient-telemetry { position: absolute; inset: 0; color: var(--ambient-label); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; letter-spacing: .2em; }
+.ambient-telemetry span { position: absolute; }
+.ambient-telemetry span:nth-child(1) { left: 4%; top: 18%; }
+.ambient-telemetry span:nth-child(2) { right: 3%; top: 61%; writing-mode: vertical-rl; }
+.ambient-telemetry span:nth-child(3) { left: 5%; bottom: 8%; }
+@keyframes ambient-coordinates { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(40px, 32px, 0); } }
+@keyframes ambient-horizon { from { transform: perspective(650px) rotateX(58deg) translate3d(0, 0, 0); } to { transform: perspective(650px) rotateX(58deg) translate3d(0, 48px, 0); } }
+@keyframes ambient-orbit { from { transform: translate3d(0, 0, 0) rotate(-18deg); } to { transform: translate3d(-16px, 24px, 0) rotate(24deg); } }
+@keyframes ambient-float { from { transform: translate3d(0, 16px, 0); opacity: .25; } to { transform: translate3d(18px, -32px, 0); opacity: .65; } }
+@keyframes ambient-stream {
+  0%, 14% { transform: translate3d(-75vw, 0, 0) rotate(-16deg); opacity: 0; }
+  30% { opacity: .16; }
+  66% { opacity: .16; }
+  86%, 100% { transform: translate3d(125vw, -12vh, 0) rotate(-16deg); opacity: 0; }
+}
+:root[data-theme="dark"] .ambient-background {
+  --ambient-line: #61cfff16;
+  --ambient-ring: #66d9ff26;
+  --ambient-particle: #c1f8ff;
+  --ambient-label: #a3e6ff24;
+  --ambient-veil: #071426e8;
+  background:
+    radial-gradient(ellipse at 88% 5%, #23527480 0%, #0e375f66 25%, transparent 62%),
+    radial-gradient(ellipse at 5% 84%, #403f702e, transparent 56%),
+    linear-gradient(155deg, #071426 0%, #0a2038 48%, #0c1a30 100%);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .ambient-background {
+    --ambient-line: #61cfff16;
+    --ambient-ring: #66d9ff26;
+    --ambient-particle: #c1f8ff;
+    --ambient-label: #a3e6ff24;
+    --ambient-veil: #071426e8;
+    background:
+      radial-gradient(ellipse at 88% 5%, #23527480 0%, #0e375f66 25%, transparent 62%),
+      radial-gradient(ellipse at 5% 84%, #403f702e, transparent 56%),
+      linear-gradient(155deg, #071426 0%, #0a2038 48%, #0c1a30 100%);
+  }
+}
+@media (max-width: 559px) {
+  .ambient-grid--far { background-size: 96px 96px; opacity: .45; }
+  .ambient-grid--near, .ambient-orbit--horizon, .ambient-beam--second, .ambient-telemetry, .ambient-particles span:nth-child(n+4) { display: none; }
+  .ambient-orbit--sky { width: 260px; top: 4%; right: -160px; opacity: .6; }
+  .ambient-beam--first { height: 48px; animation-duration: 126s; }
+  .ambient-background::after { background: var(--ambient-veil); opacity: .55; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ambient-background *, .ambient-background .ambient-particles span, .ambient-background *::before, .ambient-background *::after { animation: none; }
+  .ambient-grid--near { transform: perspective(650px) rotateX(58deg); }
+  .ambient-particles span { opacity: .35; }
+  .ambient-beam { display: none; }
+}
+
+/* ヘッダーの高さを保ちつつ、44pxのタッチ領域を持つテーマスイッチ。 */
+.header-controls { display: flex; align-items: center; gap: 12px; }
+.theme-toggle { position: relative; display: flex; align-items: center; justify-content: space-around; flex: none; width: 76px; height: 44px; margin-block: -4px; padding: 6px; border: 1px solid var(--cyan-border); border-radius: 24px; background: var(--surface); color: var(--muted); box-shadow: inset 0 0 12px var(--cyan-glow); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background-color .28s, border-color .28s, box-shadow .28s; }
+.theme-toggle[hidden] { display: none; }
+.theme-toggle::before { content: ""; position: absolute; top: 6px; left: 6px; width: 30px; height: 30px; border: 1px solid var(--cyan-border); border-radius: 50%; background: var(--icon-background); box-shadow: 0 0 10px var(--cyan-glow); transition: transform .28s ease, background-color .28s, border-color .28s; }
+:root[data-theme="dark"] .theme-toggle::before { transform: translateX(32px); }
+.theme-icon { position: relative; z-index: 1; display: grid; place-items: center; width: 30px; height: 30px; font-family: system-ui, sans-serif; font-size: 20px; line-height: 1; transition: color .28s; }
+.theme-icon--sun, :root[data-theme="dark"] .theme-icon--moon { color: var(--accent); }
+:root[data-theme="dark"] .theme-icon--sun { color: var(--muted); }
+.theme-toggle:hover { border-color: var(--accent); box-shadow: 0 0 12px var(--cyan-glow); }
+.theme-toggle:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+/* View Transitions対応ブラウザーでは背景のグラデーションも一緒にクロスフェード。 */
+::view-transition-old(root), ::view-transition-new(root), ::view-transition-group(root) { animation-duration: .28s; animation-timing-function: ease-in-out; }
+/* その他のブラウザーでも、主要な面と文字の配色を穏やかに切り替えます。 */
+body, .site-header, .wordmark, .header-note, .profile-nickname, .bio, .eyebrow, .tags li, .section-heading h2, .section-caption, .section-description, .link-label > span, .link-arrow, .gallery, .gallery-card figcaption, .gallery-hint, .photo-dialog, footer, footer small { transition: color .28s, background-color .28s, border-color .28s; }
+.social-link { transition: transform .2s, border-color .28s, box-shadow .28s, background-color .28s, color .28s; }
+.work-card { transition: border-color .28s, box-shadow .28s, background-color .28s, color .28s; }
+.gallery-control, .gallery-playback { transition: border-color .28s, box-shadow .28s, background-color .28s, color .28s; }
+@media (max-width: 380px) {
+  .header-controls { gap: 8px; }
+  .header-controls .header-note { font-size: 8px; letter-spacing: .8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body, .page *, .theme-toggle::before { transition: none; }
+  ::view-transition-old(root), ::view-transition-new(root), ::view-transition-group(root) { animation: none; }
 }
