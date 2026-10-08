@@ -433,3 +433,49 @@ body, .site-header, .wordmark, .header-note, .profile-nickname, .bio, .eyebrow, 
 @media (prefers-reduced-motion: reduce) {
   .ambient-background .ambient-diamonds, .ambient-background .ambient-diamond::after { animation: none; }
 }
+
+/* 小さな端末ラベルと区切り。主役の文字・写真には重ねません。 */
+.system-label, .stream-telemetry, .divider-code { color: var(--accent); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 8px; font-weight: 400; line-height: 1.5; letter-spacing: 1.35px; }
+.system-label { margin: 0; opacity: .66; }
+.profile { position: relative; }
+.system-label--profile { position: absolute; top: 16px; left: 50%; display: flex; align-items: center; gap: 8px; white-space: nowrap; transform: translateX(-50%); }
+.section-heading { position: relative; }
+.section-system { position: absolute; top: -14px; left: 0; }
+.digital-divider { position: absolute; left: 0; bottom: -8px; display: flex; align-items: center; gap: 8px; height: 10px; pointer-events: none; opacity: .55; }
+.digital-divider--network { width: 180px; }
+.digital-divider--stream { width: 100%; }
+.digital-divider--archive { right: 0; left: auto; width: 160px; }
+.divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--cyan-border), transparent); transform-origin: left; }
+.digital-divider--stream .divider-line { background: linear-gradient(90deg, transparent, var(--cyan-border)); }
+.divider-code { flex: none; font-size: 7px; letter-spacing: 1px; }
+.micro-diamond { display: inline-block; flex: none; width: 4px; height: 4px; border: 1px solid currentColor; transform: rotate(45deg); }
+.digital-divider--network .micro-diamond { color: var(--purple); background: currentColor; }
+.digital-divider--archive .micro-diamond { color: var(--purple); }
+.links-section .section-heading h2::after, .gallery-section .section-heading h2::after { display: none; }
+.stream-telemetry { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin: -8px 0 14px; font-size: 8px; letter-spacing: 1px; opacity: .65; }
+.stream-telemetry > span { display: inline-flex; align-items: center; gap: 6px; }
+.status-light { display: inline-block; flex: none; width: 3px; height: 3px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 5px var(--cyan-glow); animation: status-breathe 14s ease-in-out infinite alternate; }
+footer { position: relative; }
+footer::before { content: ""; position: absolute; left: 23%; top: -3px; width: 5px; height: 5px; border: 1px solid var(--purple-border); background: var(--background); transform: rotate(45deg); }
+.system-label--footer { display: flex; align-items: center; justify-content: center; gap: 7px; margin: 2px 0 6px; font-size: 7px; letter-spacing: 1.25px; }
+.social-icon { position: relative; }
+.social-link:nth-child(2) .social-icon::after, .social-link:nth-child(5) .social-icon::after { content: ""; position: absolute; right: -2px; bottom: -2px; width: 4px; height: 4px; border: 1px solid var(--cyan-border); background: var(--surface); transform: rotate(45deg); }
+.work-number::after { content: ""; display: inline-block; width: 3px; height: 3px; margin-left: 6px; border: 1px solid var(--purple); transform: rotate(45deg); vertical-align: middle; }
+.work-card:nth-child(2) .work-number::after { background: var(--purple-border); }
+.digital-divider--network .divider-line { animation: signal-line 18s ease-in-out infinite alternate; }
+@keyframes status-breathe { from { opacity: .45; } to { opacity: .85; } }
+@keyframes signal-line { from { transform: scaleX(.88); opacity: .55; } to { transform: scaleX(1); opacity: .8; } }
+/* 浮遊アニメーションとスクロール連動は親子の別レイヤーで合成します。 */
+.ambient-depth { position: absolute; inset: 0; transform: translate3d(0, var(--depth-offset, 0px), 0); }
+@media (max-width: 559px) {
+  .system-label, .stream-telemetry { letter-spacing: .85px; }
+  .digital-divider--network { width: 140px; }
+  .digital-divider--archive { display: none; }
+  .social-icon::after { display: none; }
+  .stream-telemetry { gap: 12px; font-size: 7px; }
+  .digital-divider--network .divider-line { animation: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .status-light, .digital-divider--network .divider-line { animation: none; }
+  .ambient-depth { transform: none; }
+}

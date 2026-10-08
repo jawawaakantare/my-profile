@@ -12,6 +12,7 @@
   <script src="theme.js"></script>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
+  <script src="details.js" defer></script>
 </head>
 <body>
   <!-- 装飾専用の固定背景。本文・操作・読み上げには影響しません。 -->
@@ -51,6 +52,7 @@
 
     <main>
       <section class="profile" id="profile" aria-labelledby="profile-title">
+        <p class="system-label system-label--profile" aria-hidden="true"><span class="micro-diamond"></span> PERSONAL NODE // ID.01</p>
         <!-- 正方形画像を比率を保ったまま円形にトリミングします。 -->
         <div class="avatar">
           <img class="avatar-image" src="assets/profile.jpg" alt="じゃわわ (あかんたれ)のプロフィールイラスト" width="400" height="400">
@@ -75,6 +77,8 @@
 
       <section class="links-section" aria-labelledby="links-title">
         <div class="section-heading">
+          <p class="system-label section-system" aria-hidden="true">NETWORK LINKS // EXTERNAL</p>
+          <span class="digital-divider digital-divider--network" aria-hidden="true"><span class="divider-line"></span><span class="micro-diamond"></span><span class="divider-code">02 / SIGNAL</span></span>
           <h2 id="links-title">Find me online<span>.</span></h2>
           <span class="section-caption">つながる</span>
         </div>
@@ -121,11 +125,14 @@
 
       <section class="gallery-section" id="photo-gallery" aria-labelledby="gallery-title">
         <div class="section-heading">
+          <p class="system-label section-system" aria-hidden="true">PHOTO STREAM // TOMOGASHIMA</p>
+          <span class="digital-divider digital-divider--stream" aria-hidden="true"><span class="divider-line"></span><span class="micro-diamond"></span><span class="divider-code">03 / FLOW</span></span>
           <h2 id="gallery-title">Photo Gallery<span>.</span></h2>
           <span class="section-caption">写真の記録</span>
         </div>
         <div class="gallery" id="tomogashima-gallery" role="region" aria-roledescription="カルーセル" aria-labelledby="album-title">
           <div class="album-heading"><h3 id="album-title">Tomogashima <span>/ 友ヶ島</span></h3><p>島を歩いて、光を集める。</p></div>
+          <div class="stream-telemetry" aria-hidden="true"><span><i class="status-light"></i> STREAM : ACTIVE</span><span id="photo-stream-count">8 IMAGES</span><span>LOOP : ∞</span></div>
           <div class="gallery-stage" id="gallery-stage" tabindex="0" aria-label="友ヶ島の写真一覧" aria-describedby="gallery-hint">
             <!-- 写真一覧はscript.jsのtomogashimaPhotosで編集します。 -->
             <div class="gallery-track" id="gallery-track">
@@ -143,6 +150,8 @@
 
       <section class="works-section" aria-labelledby="works-title">
         <div class="section-heading">
+          <p class="system-label section-system" aria-hidden="true">WORK ARCHIVE // 00X</p>
+          <span class="digital-divider digital-divider--archive" aria-hidden="true"><span class="divider-line"></span><span class="micro-diamond"></span><span class="divider-code">04 / ARCHIVE</span></span>
           <h2 id="works-title">Works<span>.</span></h2>
           <span class="section-caption">つくったもの</span>
         </div>
@@ -162,7 +171,7 @@
       </section>
     </main>
 
-    <footer><p>Thanks for visiting jawawa's corner<span> ✳</span></p><small>© <span id="year">2026</span> Jawawa</small></footer>
+    <footer><p>Thanks for visiting jawawa's corner<span> ✳</span></p><p class="system-label system-label--footer" aria-hidden="true"><i class="status-light"></i> SYSTEM STATUS // ONLINE</p><small>© <span id="year">2026</span> Jawawa</small></footer>
   </div>
   <!-- Escキーや閉じるボタンで閉じる、写真の拡大表示です。 -->
   <dialog class="photo-dialog" id="photo-dialog" aria-label="友ヶ島の写真を拡大表示">
