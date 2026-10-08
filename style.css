@@ -1,0 +1,219 @@
+/* サイト全体の色。本文用の落ち着いた色と、装飾用のネオンを分けています。
+   ライトモードのアクセント文字は、白背景でも読めるよう濃い色にします。 */
+:root {
+  color-scheme: light;
+  --background: #f6f5fa;
+  --surface: #ffffff;
+  --text: #231b36;
+  --muted: #625970;
+  --accent: #006d80;
+  --magenta: #b01478;
+  --purple: #6830d8;
+  --neon-cyan: #00cee8;
+  --neon-magenta: #ff29b8;
+  --neon-purple: #934aff;
+  --border: #d8cfe7;
+  --cyan-border: #90ccd6;
+  --magenta-border: #e5a3cf;
+  --purple-border: #bda4e9;
+  --cyan-glow: #00cee81f;
+  --magenta-glow: #ff29b81a;
+  --purple-glow: #934aff1c;
+  --avatar-background: #e8faff;
+  --icon-background: #edf9fb;
+  --magenta-background: #fff0fa;
+  --purple-background: #f3edff;
+  --status-background: #f3edff;
+  --art-blue: #d7f8ff;
+  --art-peach: #f9dff4;
+  --art-blue-gradient: linear-gradient(125deg, #d7f8ff 0%, #dce0ff 55%, #ead4ff 100%);
+  --art-peach-gradient: linear-gradient(125deg, #f9dff4 0%, #e7d8ff 55%, #dbf7ff 100%);
+  --art-grid: #6830d810;
+  --art-number: #625970;
+  --art-window-border: #006d80;
+  --art-window-background: #f4fcff;
+  --art-window-shadow: #c4beef;
+  --art-window-line: #6830d8;
+  --art-orbit-line: #b01478;
+  --art-orbit-fill: #e7d8ff;
+  --gallery-background: #eeedf2;
+}
+
+/* 端末がダークモードのときだけ、色を上書きします。
+   設定が変わるとブラウザーが自動で切り替えるため、JavaScriptは不要です。 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --background: #090d18;
+    --surface: #131a2b;
+    --text: #eef0ff;
+    --muted: #b4b6cd;
+    --accent: #35efff;
+    --magenta: #ff6bd8;
+    --purple: #b99aff;
+    --neon-cyan: #35efff;
+    --neon-magenta: #ff47ce;
+    --neon-purple: #a66bff;
+    --border: #383450;
+    --cyan-border: #286477;
+    --magenta-border: #71335f;
+    --purple-border: #55417e;
+    --cyan-glow: #35efff20;
+    --magenta-glow: #ff47ce20;
+    --purple-glow: #a66bff24;
+    --avatar-background: #132c3f;
+    --icon-background: #142b39;
+    --magenta-background: #30182e;
+    --purple-background: #241c3e;
+    --status-background: #241c3e;
+    --art-blue: #0b3445;
+    --art-peach: #371343;
+    --art-blue-gradient: linear-gradient(125deg, #0b3445 0%, #192557 55%, #42185d 100%);
+    --art-peach-gradient: linear-gradient(125deg, #371343 0%, #2d1b57 55%, #103c4b 100%);
+    --art-grid: #35efff12;
+    --art-number: #b4b6cd;
+    --art-window-border: #35efff;
+    --art-window-background: #101f36;
+    --art-window-shadow: #361b68;
+    --art-window-line: #b99aff;
+    --art-orbit-line: #ff6bd8;
+    --art-orbit-fill: #2d1b57;
+    --gallery-background: #05070c;
+  }
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+/* キーボード操作でも、選択中のリンクがわかるようにします。 */
+a:focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
+.page { width: min(100% - 40px, 680px); margin-inline: auto; }
+.site-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 26px; border-bottom: 1px solid var(--border); }
+.wordmark { font-size: 22px; font-weight: 800; letter-spacing: -1px; text-decoration: none; color: var(--purple); }
+.brand-dot, .name-dot, .section-heading h2 span { color: var(--magenta); text-shadow: 0 0 12px var(--magenta-glow); }
+.header-note { color: var(--muted); font-size: 10px; letter-spacing: 1.6px; }
+
+/* プロフィール画像と自己紹介 */
+.profile { padding: 48px 0 42px; text-align: center; }
+.avatar { display: grid; place-items: center; width: 104px; height: 104px; margin: 0 auto 24px; padding: 0; overflow: hidden; border: 6px solid var(--surface); border-radius: 50%; background: var(--avatar-background); box-shadow: 0 0 0 1px var(--neon-cyan), 0 0 22px var(--cyan-glow); }
+.avatar-image { display: block; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; object-position: center; }
+.eyebrow { margin: 0 0 2px; color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: 2.5px; }
+h1 { margin: 0 0 14px; font-size: clamp(28px, 6vw, 40px); line-height: 1.4; letter-spacing: .02em; }
+.profile-nickname { display: inline-block; font-size: .65em; font-weight: 500; color: var(--purple); }
+.bio { max-width: 32em; margin: 0 auto; color: var(--muted); font-size: 15px; line-height: 2.1; text-align: left; overflow-wrap: anywhere; }
+.tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; padding: 0; list-style: none; }
+.tags li { padding: 4px 11px; border: 1px solid var(--border); border-radius: 20px; color: var(--muted); font-size: 11px; }
+
+/* SNSボタン。リンク全体がクリックできます。 */
+.section-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.section-heading h2 { margin: 0; font-size: 23px; letter-spacing: -.7px; color: var(--purple); }
+.section-caption { color: var(--muted); font-size: 11px; }
+.social-links { display: grid; gap: 12px; }
+/* 各SNSの色を変えても、説明文は共通の読みやすい色を保ちます。 */
+.social-link { --link-accent: var(--accent); --link-border: var(--cyan-border); --link-glow: var(--cyan-glow); --link-background: var(--icon-background); display: flex; align-items: center; gap: 16px; padding: 18px; border: 1px solid var(--link-border); border-radius: 16px; background: var(--surface); text-decoration: none; box-shadow: inset 0 0 12px var(--link-glow); transition: transform .2s, border-color .2s, box-shadow .2s; }
+/* 並び順を変えても色が変わらないよう、HTMLのクラスで指定します。 */
+.social-link--magenta { --link-accent: var(--magenta); --link-border: var(--magenta-border); --link-glow: var(--magenta-glow); --link-background: var(--magenta-background); }
+.social-link--purple { --link-accent: var(--purple); --link-border: var(--purple-border); --link-glow: var(--purple-glow); --link-background: var(--purple-background); }
+.social-link:hover, .social-link:focus-visible { border-color: var(--link-accent); box-shadow: inset 0 0 12px var(--link-glow), 0 0 18px var(--link-glow); }
+.social-link:hover { transform: translateY(-2px); }
+.social-icon { display: grid; place-items: center; flex: 0 0 44px; width: 44px; height: 44px; border-radius: 12px; background: var(--link-background); color: var(--link-accent); box-shadow: inset 0 0 0 1px var(--link-border); }
+.social-icon svg { width: 21px; height: 21px; fill: currentColor; }
+.social-icon .outline-icon { fill: none; stroke: currentColor; stroke-width: 1.8; }
+.social-icon .filled-dot { fill: currentColor; stroke: none; }
+/* Spotifyの波線とDiscordの目を、アイコン背景の色で抜きます。 */
+.social-icon .icon-cutout { fill: none; stroke: var(--link-background); stroke-width: 1.5; stroke-linecap: round; }
+.social-icon .icon-eye { fill: var(--link-background); }
+.link-label { min-width: 0; }
+.link-label strong { display: block; font-size: 15px; }
+.link-label > span { display: block; color: var(--muted); font-size: 11px; }
+.link-arrow { margin-left: auto; color: var(--link-accent); font-size: 23px; }
+
+/* 制作物のカード。小さい画面では縦に並べます。 */
+.works-section { margin-top: 44px; }
+.works-section .section-heading { margin-bottom: 6px; }
+.section-description { margin: 0 0 20px; color: var(--muted); font-size: 12px; }
+.works-grid { display: grid; gap: 16px; }
+.work-card { --work-border: var(--purple-border); --work-glow: var(--purple-glow); overflow: hidden; border: 1px solid var(--work-border); border-radius: 16px; background: var(--surface); box-shadow: inset 0 0 14px var(--work-glow); transition: border-color .2s, box-shadow .2s; }
+.work-card:nth-child(2) { --work-border: var(--magenta-border); --work-glow: var(--magenta-glow); }
+.work-card:hover, .work-card:focus-within { border-color: var(--purple); box-shadow: inset 0 0 14px var(--work-glow), 0 0 18px var(--work-glow); }
+.work-art { position: relative; display: grid; place-items: center; height: 150px; overflow: hidden; }
+/* グラデーションと細いグリッドは装飾のみ。カードの大きさは変えません。 */
+.work-art::before { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(var(--art-grid) 1px, transparent 1px), linear-gradient(90deg, var(--art-grid) 1px, transparent 1px); background-size: 24px 24px; }
+.art-blue { background: var(--art-blue); background-image: var(--art-blue-gradient); }
+.art-peach { background: var(--art-peach); background-image: var(--art-peach-gradient); }
+.work-number { position: absolute; bottom: 12px; left: 16px; color: var(--art-number); background: var(--surface); border-radius: 4px; padding: 1px 6px; font-size: 11px; letter-spacing: 1px; }
+.art-window { display: flex; flex-direction: column; justify-content: center; gap: 9px; width: 126px; height: 88px; padding: 20px; border: 1px solid var(--art-window-border); border-radius: 10px; background: var(--art-window-background); transform: rotate(-8deg); box-shadow: 8px 8px 0 var(--art-window-shadow), 0 0 18px var(--cyan-glow); }
+.art-window span { height: 5px; border-radius: 8px; background: var(--art-window-line); }
+.art-window span:first-child { width: 40%; background: var(--accent); }
+.art-window span:last-child { width: 70%; }
+.art-orbit { width: 86px; height: 86px; border: 1px solid var(--art-orbit-line); border-radius: 50%; box-shadow: 20px 0 0 -1px var(--art-orbit-fill), 20px 0 0 0 var(--art-orbit-line), 0 0 20px var(--magenta-glow); transform: rotate(-30deg); }
+.work-details { padding: 18px 20px 22px; }
+.status { display: inline-block; padding: 2px 8px; border-radius: 5px; background: var(--status-background); color: var(--purple); font-size: 10px; }
+h3 { margin: 9px 0 5px; font-size: 15px; }
+.work-details p { margin: 0; color: var(--muted); font-size: 12px; }
+footer { margin-top: 46px; padding: 25px 0 32px; border-top: 1px solid var(--border); text-align: center; }
+footer p { margin: 0 0 7px; font-size: 13px; }
+footer p span { color: var(--accent); }
+footer small { color: var(--muted); font-size: 10px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+/* 幅が560px以上の画面では、Worksを2列にします。 */
+@media (min-width: 560px) {
+  .page { width: min(100% - 64px, 680px); }
+  .profile { padding-block: 56px 48px; }
+  .works-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .social-link { padding: 18px 22px; }
+}
+/* 動きを減らす設定をしている人には、アニメーションを省きます。 */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .social-link, .work-card { transition: none; }
+  .social-link:hover { transform: none; }
+}
+
+/* 写真は切り抜かずに表示。ギャラリーの装飾は控えめにします。 */
+.gallery-section { margin-top: 44px; }
+.gallery-section .section-heading h2 { color: var(--text); }
+.gallery { padding: 20px; background: var(--gallery-background); border: 1px solid var(--border); border-radius: 16px; }
+.album-heading { margin-bottom: 18px; }
+.album-heading h3 { margin: 0; font-size: 16px; }
+.album-heading h3 span { color: var(--muted); font-size: 13px; font-weight: 400; }
+.album-heading p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+.gallery-stage { position: relative; display: block; width: 100%; aspect-ratio: 4 / 3; padding: 0; overflow: hidden; border: 0; border-radius: 4px; background: var(--gallery-background); cursor: zoom-in; touch-action: pan-y pinch-zoom; }
+.gallery-slide { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 1200ms ease-in-out; pointer-events: none; }
+.gallery-slide.is-active { opacity: 1; }
+.gallery-expand { position: absolute; right: 10px; bottom: 10px; padding: 3px 8px; border-radius: 4px; background: #05070ccc; color: #fff; font-size: 11px; pointer-events: none; }
+.gallery-toolbar, .gallery-navigation { display: flex; align-items: center; gap: 8px; }
+.gallery-toolbar { justify-content: space-between; flex-wrap: wrap; margin-top: 14px; }
+.gallery-control, .gallery-playback { min-width: 44px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--accent); font: inherit; font-size: 14px; cursor: pointer; transition: border-color .2s, box-shadow .2s; }
+.gallery-control:hover, .gallery-playback:hover { border-color: var(--accent); box-shadow: 0 0 12px var(--cyan-glow); }
+.gallery-control:disabled, .gallery-playback:disabled { opacity: .5; cursor: default; box-shadow: none; }
+.gallery-stage:focus-visible, .gallery-control:focus-visible, .gallery-playback:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.gallery-counter { min-width: 52px; color: var(--muted); font-size: 12px; text-align: center; font-variant-numeric: tabular-nums; }
+.gallery-caption { margin: 12px 0 0; font-size: 13px; overflow-wrap: anywhere; }
+.gallery-hint { margin: 6px 0 0; color: var(--muted); font-size: 11px; }
+#gallery-status { display: block; margin-top: 4px; }
+.photo-dialog { width: min(96vw, 1440px); max-width: 96vw; max-height: 96vh; max-height: 96dvh; padding: 56px 16px 16px; overflow: auto; border: 1px solid var(--border); border-radius: 8px; background: var(--gallery-background); color: var(--text); }
+.photo-dialog::backdrop { background: #000000e6; }
+.photo-dialog img { display: block; width: 100%; height: min(72vh, 1000px); height: min(72dvh, 1000px); object-fit: contain; }
+.photo-dialog p { margin: 12px 0 0; text-align: center; font-size: 13px; overflow-wrap: anywhere; }
+.dialog-close { position: absolute; top: 8px; right: 8px; font-size: 22px; }
+body.photo-open { overflow: hidden; }
+/* 縦写真もスマートフォンで大きく見られるよう、表示枠を縦寄りにします。 */
+@media (max-width: 559px) {
+  .gallery-stage { aspect-ratio: 4 / 5; }
+}
+@media (max-width: 400px) {
+  .gallery { padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-slide, .gallery-control, .gallery-playback { transition: none; }
+}

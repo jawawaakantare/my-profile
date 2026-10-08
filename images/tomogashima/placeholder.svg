@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <rect width="1200" height="800" fill="#101722"/>
+  <rect x="60" y="60" width="1080" height="680" rx="4" fill="none" stroke="#394556"/>
+  <path d="M540 350h120m-60-60v120" stroke="#708397" stroke-width="2"/>
+  <g fill="#bcc7d3" text-anchor="middle" font-family="sans-serif">
+    <text x="600" y="480" font-size="24" letter-spacing="5">TOMOGASHIMA</text>
+    <text x="600" y="522" font-size="14" letter-spacing="3">PHOTO PLACEHOLDER</text>
+  </g>
+</svg>
