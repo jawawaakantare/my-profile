@@ -424,11 +424,34 @@ body, .site-header, .wordmark, .header-note, .profile-nickname, .bio, .eyebrow, 
 .section-heading h2::before { content: ""; position: absolute; left: 2px; top: calc(50% - 3px); width: 6px; height: 6px; border: 1px solid var(--accent); transform: rotate(45deg); }
 .section-heading h2::after { content: ""; position: absolute; left: 0; bottom: -4px; width: 24px; height: 1px; background: var(--cyan-border); transform: skewX(-45deg); }
 @media (max-width: 559px) {
-  .ambient-grid, .ambient-particles span:nth-child(n+3), .ambient-diamond--panel:nth-child(n+3), .ambient-diamond--wire:nth-child(n+2), .ambient-diamond--panel:nth-child(2)::after { display: none; }
-  .ambient-diamond--panel:nth-child(1) { width: 290px; right: -200px; top: -2%; }
-  .ambient-diamond--panel:nth-child(2) { width: 230px; left: -185px; top: 62%; }
-  .ambient-diamond--wire:nth-child(1) { width: 130px; right: -65px; top: 42%; opacity: .7; }
+  /* PCの縮小版ではなく、縦長の画面の左右・上下に別々の形を配置。 */
+  .ambient-grid--near, .ambient-particles span:nth-child(n+3), .ambient-diamond--panel::after { display: none; }
+  .ambient-background { --diamond-line: #258eae70; --diamond-fill: #68dcff24; }
+  .ambient-background::after { background: linear-gradient(90deg, transparent, var(--ambient-veil) 30%, var(--ambient-veil) 70%, transparent); opacity: .62; }
+  .ambient-grid--far { display: block; inset: -24px; background-size: 112px 168px; opacity: .2; }
+  .ambient-diamonds--panels { animation-name: diamond-mobile-panels; animation-duration: 184s; }
+  .ambient-diamonds--wire { animation-name: diamond-mobile-wires; animation-duration: 226s; }
+  .ambient-diamond--panel:nth-child(1) { width: clamp(135px, 42vw, 205px); right: auto; left: -55px; top: 12%; }
+  .ambient-diamond--panel:nth-child(2) { width: clamp(170px, 52vw, 260px); left: auto; right: -80px; top: 66%; }
+  .ambient-diamond--panel:nth-child(3) { width: 66px; left: auto; right: 10px; top: 40%; opacity: .45; }
+  .ambient-diamond--panel:nth-child(4) { width: 42px; right: auto; left: 9px; bottom: 6%; opacity: .55; }
+  .ambient-diamond--panel:nth-child(n+3)::before { inset: 8px; }
+  .ambient-diamond--wire:nth-child(1) { width: clamp(135px, 41vw, 190px); right: auto; left: -48px; top: 44%; opacity: .85; }
+  .ambient-diamond--wire:nth-child(2) { width: clamp(100px, 32vw, 155px); left: auto; right: -36px; top: 16%; opacity: .7; border-color: var(--purple-border); }
+  .ambient-diamond--wire:nth-child(3) { width: 86px; right: auto; left: -10px; top: 77%; opacity: .7; }
+  .ambient-diamond--wire:nth-child(2)::before { border-color: var(--purple-border); }
+  .ambient-diamond--wire::after { inset: -12px 12px 12px -12px; }
+  .ambient-telemetry { display: block; font-size: 7px; letter-spacing: 1px; opacity: .7; }
+  .ambient-telemetry span:nth-child(1) { left: 7px; top: 35%; writing-mode: vertical-rl; }
+  .ambient-telemetry span:nth-child(2) { right: 7px; top: 54%; }
+  .ambient-telemetry span:nth-child(3) { left: 9px; bottom: 3%; }
+  :root[data-theme="dark"] .ambient-background { --diamond-line: #50dfe66b; --diamond-fill: #2cccd61f; }
 }
+@media (max-width: 559px) and (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .ambient-background { --diamond-line: #50dfe66b; --diamond-fill: #2cccd61f; }
+}
+@keyframes diamond-mobile-panels { from { transform: translate3d(6px, -8px, 0); } to { transform: translate3d(-8px, 12px, 0); } }
+@keyframes diamond-mobile-wires { from { transform: translate3d(-5px, 6px, 0); } to { transform: translate3d(7px, -8px, 0); } }
 @media (prefers-reduced-motion: reduce) {
   .ambient-background .ambient-diamonds, .ambient-background .ambient-diamond::after { animation: none; }
 }
@@ -515,3 +538,14 @@ footer::before { content: ""; position: absolute; left: 23%; top: -3px; width: 5
   .nav-panel::after, .nav-panel:hover::after, .nav-panel.is-activating::after { animation: none; }
   #network:target .section-heading h2::before, #photo-gallery:target .section-heading h2::before, #work-archive:target .section-heading h2::before { animation: none; }
 }
+
+/* 自己紹介の本文サイズ・改行は維持し、控えめな開閉操作だけ添えます。 */
+.bio p { margin: 0; }
+.bio-more { overflow: hidden; }
+.bio-toggle { display: inline-flex; align-items: center; gap: 8px; min-width: 76px; min-height: 44px; margin: 2px 0; padding: 0 10px 0 2px; border: 0; background: transparent; color: var(--accent); font: inherit; font-size: 12px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.bio-toggle[hidden] { display: none; }
+.bio-toggle-label { border-bottom: 1px solid var(--cyan-border); line-height: 1.6; }
+.bio-toggle .micro-diamond { width: 4px; height: 4px; opacity: .7; }
+.bio-toggle:hover .bio-toggle-label, .bio-toggle:active .bio-toggle-label { border-color: var(--accent); }
+.bio-toggle:active { background: var(--cyan-glow); }
+.bio-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }

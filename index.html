@@ -14,6 +14,7 @@
   <script src="script.js" defer></script>
   <script src="details.js" defer></script>
   <script src="navigation.js" defer></script>
+  <script src="profile.js" defer></script>
 </head>
 <body>
   <!-- 装飾専用の固定背景。本文・操作・読み上げには影響しません。 -->
@@ -61,14 +62,19 @@
         <p class="eyebrow">HELLO, I'M</p>
         <!-- 名前・自己紹介は、ここを書き換えてください。 -->
         <h1 id="profile-title">じゃわわ <span class="profile-nickname">(あかんたれ)</span></h1>
-        <p class="bio">南大阪(山側)生まれ奈良住みの河内のおっさん←<br>
-          心は永遠の和泉ナンバー◎<br>
-          無駄にMT車乗りたい人。<br>
-          車歴はL200S→L502S→HA21S→DE5FS。<br>
-          水曜深夜ちょっと前は板橋区民。<br>
-          だいたいガジェットと配線に囲まれてたい人。<br>
-          EQは死ぬほどﾄﾞﾝｼｬﾘ<br>
-          ※ﾌﾟﾛﾌ画 @Lapin_Biante</p>
+        <div class="bio">
+          <p>南大阪(山側)生まれ奈良住みの河内のおっさん←<br>
+            心は永遠の和泉ナンバー◎</p>
+          <button class="bio-toggle" id="bio-toggle" type="button" aria-expanded="false" aria-controls="bio-more" hidden><span class="micro-diamond" aria-hidden="true"></span><span class="bio-toggle-label">その他</span></button>
+          <div class="bio-more" id="bio-more">
+            <p>無駄にMT車乗りたい人。<br>
+              車歴はL200S→L502S→HA21S→DE5FS。<br>
+              水曜深夜ちょっと前は板橋区民。<br>
+              だいたいガジェットと配線に囲まれてたい人。<br>
+              EQは死ぬほどﾄﾞﾝｼｬﾘ<br>
+              ※ﾌﾟﾛﾌ画 @Lapin_Biante</p>
+          </div>
+        </div>
         <nav class="section-nav" aria-label="ページ内ナビゲーション">
           <a class="nav-panel" href="#network" aria-label="NETWORK：Find me onlineへ移動"><span class="nav-node" aria-hidden="true"></span><span class="nav-text"><strong>NETWORK</strong><small>EXTERNAL</small></span></a>
           <a class="nav-panel" href="#photo-gallery" aria-label="PHOTO STREAM：Photo Galleryへ移動"><span class="nav-node" aria-hidden="true"></span><span class="nav-text"><strong>PHOTO STREAM</strong><small>GALLERY</small></span></a>

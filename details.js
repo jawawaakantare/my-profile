@@ -28,14 +28,16 @@ if (photoStreamCount && typeof tomogashimaPhotos !== "undefined") {
     frame = null;
     const progress = window.scrollY / Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
     layers.forEach(({ wrapper, distance }) => {
-      wrapper.style.setProperty("--depth-offset", `${(-Math.min(1, Math.max(0, progress)) * distance).toFixed(2)}px`);
+      // 縦長画面では同じ3層を最大8px／3px／1.5pxだけ動かします。
+      const travel = compact.matches ? distance / 2 : distance;
+      wrapper.style.setProperty("--depth-offset", `${(-Math.min(1, Math.max(0, progress)) * travel).toFixed(2)}px`);
     });
   }
   function queueUpdate() {
     if (frame === null) frame = requestAnimationFrame(update);
   }
   function configure() {
-    const enabled = !reducedMotion.matches && !compact.matches;
+    const enabled = !reducedMotion.matches;
     if (enabled && !listening) {
       window.addEventListener("scroll", queueUpdate, { passive: true });
       window.addEventListener("resize", queueUpdate, { passive: true });
