@@ -294,11 +294,6 @@ body.photo-open { overflow: hidden; }
 }
 .ambient-grid--far { opacity: .7; animation: ambient-coordinates 112s ease-in-out infinite alternate; }
 .ambient-grid--near { inset: 54% -12% -24%; opacity: .45; background-size: 64px 64px; transform-origin: center top; animation: ambient-horizon 138s ease-in-out infinite alternate; }
-.ambient-orbit { position: absolute; width: clamp(280px, 38vw, 560px); aspect-ratio: 1; border: 1px solid var(--ambient-ring); border-left-color: transparent; border-bottom-color: transparent; border-radius: 50%; animation: ambient-orbit 154s ease-in-out infinite alternate; }
-.ambient-orbit::before { content: ""; position: absolute; inset: 24px; border: 1px solid var(--ambient-ring); border-top-color: transparent; border-radius: 50%; }
-.ambient-orbit::after { content: ""; position: absolute; inset: -12% 50%; width: 1px; background: linear-gradient(transparent, var(--ambient-ring), transparent); transform: rotate(38deg); }
-.ambient-orbit--sky { top: -8%; right: -7%; }
-.ambient-orbit--horizon { bottom: -14%; left: -10%; width: clamp(260px, 30vw, 430px); opacity: .65; animation-duration: 187s; animation-direction: alternate-reverse; }
 .ambient-particles { position: absolute; inset: 0; }
 .ambient-particles span { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: var(--ambient-particle); box-shadow: 0 0 9px 2px var(--ambient-ring); animation: ambient-float 83s ease-in-out infinite alternate; }
 .ambient-particles span:nth-child(1) { left: 8%; top: 28%; animation-delay: -17s; }
@@ -319,7 +314,6 @@ body.photo-open { overflow: hidden; }
 .ambient-telemetry span:nth-child(3) { left: 5%; bottom: 8%; }
 @keyframes ambient-coordinates { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(40px, 32px, 0); } }
 @keyframes ambient-horizon { from { transform: perspective(650px) rotateX(58deg) translate3d(0, 0, 0); } to { transform: perspective(650px) rotateX(58deg) translate3d(0, 48px, 0); } }
-@keyframes ambient-orbit { from { transform: translate3d(0, 0, 0) rotate(-18deg); } to { transform: translate3d(-16px, 24px, 0) rotate(24deg); } }
 @keyframes ambient-float { from { transform: translate3d(0, 16px, 0); opacity: .25; } to { transform: translate3d(18px, -32px, 0); opacity: .65; } }
 @keyframes ambient-stream {
   0%, 14% { transform: translate3d(-75vw, 0, 0) rotate(-16deg); opacity: 0; }
@@ -353,8 +347,7 @@ body.photo-open { overflow: hidden; }
 }
 @media (max-width: 559px) {
   .ambient-grid--far { background-size: 96px 96px; opacity: .45; }
-  .ambient-grid--near, .ambient-orbit--horizon, .ambient-beam--second, .ambient-telemetry, .ambient-particles span:nth-child(n+4) { display: none; }
-  .ambient-orbit--sky { width: 260px; top: 4%; right: -160px; opacity: .6; }
+  .ambient-grid--near, .ambient-beam--second, .ambient-telemetry, .ambient-particles span:nth-child(n+4) { display: none; }
   .ambient-beam--first { height: 48px; animation-duration: 126s; }
   .ambient-background::after { background: var(--ambient-veil); opacity: .55; }
 }
@@ -390,4 +383,53 @@ body, .site-header, .wordmark, .header-note, .profile-nickname, .bio, .eyebrow, 
 @media (prefers-reduced-motion: reduce) {
   body, .page *, .theme-toggle::before { transition: none; }
   ::view-transition-old(root), ::view-transition-new(root), ::view-transition-group(root) { animation: none; }
+}
+
+/* 非対称に重なるガラスのひし形と、別方向へ漂う細いワイヤー。 */
+.ambient-background { --diamond-line: #2a9dc74d; --diamond-fill: #69dfff1c; --diamond-shine: #ffffffc2; }
+.ambient-grid--far { opacity: .24; }
+.ambient-grid--near { opacity: .18; }
+.ambient-particles span:nth-child(n+5) { display: none; }
+.ambient-diamonds { position: absolute; inset: 0; }
+.ambient-diamonds--panels { animation: diamond-panels 174s ease-in-out infinite alternate; }
+.ambient-diamonds--wire { animation: diamond-wires 219s ease-in-out infinite alternate; }
+.ambient-diamond { position: absolute; display: block; aspect-ratio: 1; transform: rotate(45deg); pointer-events: none; }
+.ambient-diamond--panel { overflow: hidden; border: 1px solid var(--diamond-line); background: linear-gradient(135deg, var(--diamond-shine), transparent 22%, var(--diamond-fill) 56%, transparent 100%); box-shadow: inset 0 0 40px #80eaff0a; }
+.ambient-diamond--panel::before { content: ""; position: absolute; inset: 20px; border: 1px solid var(--diamond-line); opacity: .3; }
+.ambient-diamond--panel:nth-child(1) { width: clamp(360px, 42vw, 630px); right: -15%; top: -18%; }
+.ambient-diamond--panel:nth-child(2) { width: clamp(300px, 32vw, 470px); left: -18%; top: 47%; background: linear-gradient(140deg, transparent, var(--diamond-fill) 40%, #8be9ff22 75%, transparent); }
+.ambient-diamond--panel:nth-child(3) { width: clamp(160px, 17vw, 260px); left: 7%; top: 8%; opacity: .42; }
+.ambient-diamond--panel:nth-child(4) { width: clamp(140px, 15vw, 230px); right: 8%; bottom: 5%; opacity: .5; }
+.ambient-diamond--panel:nth-child(-n+2)::after { content: ""; position: absolute; top: 0; left: 0; width: 30%; height: 1px; background: linear-gradient(90deg, transparent, var(--diamond-shine), var(--ambient-particle), transparent); box-shadow: 0 0 7px var(--diamond-line); animation: diamond-edge 76s linear infinite; }
+.ambient-diamond--panel:nth-child(2)::after { animation-duration: 103s; animation-delay: -42s; }
+.ambient-diamond--wire { border: 1px solid var(--diamond-line); }
+.ambient-diamond--wire::before, .ambient-diamond--wire::after { content: ""; position: absolute; border: 1px solid var(--diamond-line); }
+.ambient-diamond--wire::before { inset: 18px; opacity: .55; }
+.ambient-diamond--wire::after { inset: -28px 28px 28px -28px; opacity: .32; }
+.ambient-diamond--wire:nth-child(1) { width: clamp(190px, 23vw, 330px); right: -1%; top: 36%; }
+.ambient-diamond--wire:nth-child(2) { width: clamp(150px, 18vw, 260px); left: 2%; top: 24%; opacity: .7; }
+.ambient-diamond--wire:nth-child(3) { width: 92px; right: 21%; top: 5%; opacity: .55; }
+@keyframes diamond-panels { from { transform: translate3d(26px, -30px, 0); } to { transform: translate3d(-38px, 48px, 0); } }
+@keyframes diamond-wires { from { transform: translate3d(-22px, 18px, 0); } to { transform: translate3d(32px, -28px, 0); } }
+@keyframes diamond-edge { 0% { transform: translateX(-120%); opacity: 0; } 18%, 72% { opacity: .65; } 100% { transform: translateX(430%); opacity: 0; } }
+:root[data-theme="dark"] .ambient-background { --diamond-line: #50dfe650; --diamond-fill: #2cccd615; --diamond-shine: #aaf7ff26; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .ambient-background { --diamond-line: #50dfe650; --diamond-fill: #2cccd615; --diamond-shine: #aaf7ff26; }
+}
+/* 既存の余白・サイズは保ち、対角の小さなカットとシアンのディテールだけ加えます。 */
+.social-link, .work-card { position: relative; border-radius: 0; clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px); }
+.social-link::before, .work-card::before { content: ""; position: absolute; width: 18px; height: 1px; top: 5px; left: -3px; background: var(--cyan-border); transform: rotate(-45deg); pointer-events: none; }
+.social-link::after, .work-card::after { content: ""; position: absolute; width: 30px; height: 1px; top: 0; right: 18px; background: var(--accent); opacity: .65; pointer-events: none; }
+.social-link:focus-visible, .work-card:focus-within { outline: 3px solid var(--accent); outline-offset: -4px; }
+.section-heading h2 { position: relative; padding-left: 18px; }
+.section-heading h2::before { content: ""; position: absolute; left: 2px; top: calc(50% - 3px); width: 6px; height: 6px; border: 1px solid var(--accent); transform: rotate(45deg); }
+.section-heading h2::after { content: ""; position: absolute; left: 0; bottom: -4px; width: 24px; height: 1px; background: var(--cyan-border); transform: skewX(-45deg); }
+@media (max-width: 559px) {
+  .ambient-grid, .ambient-particles span:nth-child(n+3), .ambient-diamond--panel:nth-child(n+3), .ambient-diamond--wire:nth-child(n+2), .ambient-diamond--panel:nth-child(2)::after { display: none; }
+  .ambient-diamond--panel:nth-child(1) { width: 290px; right: -200px; top: -2%; }
+  .ambient-diamond--panel:nth-child(2) { width: 230px; left: -185px; top: 62%; }
+  .ambient-diamond--wire:nth-child(1) { width: 130px; right: -65px; top: 42%; opacity: .7; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ambient-background .ambient-diamonds, .ambient-background .ambient-diamond::after { animation: none; }
 }
