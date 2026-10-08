@@ -34,3 +34,23 @@
   reducedMotion.addEventListener("change", configure);
   configure();
 })();
+
+// 外部リンクの移動はブラウザーに任せ、タッチでも短い操作反応を残します。
+(() => {
+  const timers = new WeakMap();
+  document.querySelectorAll(".social-link").forEach((link) => {
+    function feedback() {
+      clearTimeout(timers.get(link));
+      link.classList.remove("is-pressed");
+      void link.offsetWidth;
+      link.classList.add("is-pressed");
+      timers.set(link, setTimeout(() => link.classList.remove("is-pressed"), 450));
+    }
+    link.addEventListener("pointerdown", (event) => {
+      if (event.isPrimary && event.button === 0) feedback();
+    });
+    link.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.repeat) feedback();
+    });
+  });
+})();

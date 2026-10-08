@@ -1,6 +1,6 @@
 /* オリジナルの2000年代デジタル端末スキン。内容・カルーセルの寸法と動作は別管理。 */
 :root {
-  --text: #203b50; --muted: #536d80; --accent: #086b88; --purple: #3276a1;
+  --text: #203b50; --muted: #486174; --accent: #086b88; --purple: #3276a1;
   --magenta: #9a5283; --surface: #f6fcff; --border: #adcbd8; --cyan-border: #81bfd0;
   --icon-background: #e1f3f8; --purple-background: #e9f2fc; --magenta-background: #eef2f9;
   --gallery-background: #eaf4fa; --status-background: #e4f2f9;
@@ -8,8 +8,10 @@
   --art-peach-gradient: linear-gradient(125deg, #e1eafa, #cde9f4 55%, #effaff);
   --art-grid: #2a769514; --art-window-background: #f1fbff; --art-window-shadow: #aed0df;
   --art-window-line: #3276a1; --art-orbit-line: #548daf; --art-orbit-fill: #cfebf5;
-  --panel-face: linear-gradient(110deg, #ffffffec, #e6f5fbbf 72%, #dcecf5e8);
-  --metal-strip: linear-gradient(180deg, #fcffff, #e7f1f7 45%, #c7dce7 49%, #eaf6fc);
+  --panel-face: linear-gradient(110deg, #ffffffa8, #e6f5fb85 72%, #dcecf5a3);
+  --glass-face: linear-gradient(110deg, #ffffff66, #dff2fb4d 72%, #d3eaf559);
+  --glass-highlight: #ffffff9c; --glass-shadow: #315d7e16;
+  --metal-strip: linear-gradient(180deg, #fcffffa8, #e7f1f770 45%, #c7dce78a 49%, #eaf6fc70);
   --panel-edge: #ffffffd9; --panel-shadow: #75a4be16; --frame-soft: #96c1d44d;
   --scan-ink: #18598105;
 }
@@ -22,8 +24,10 @@
   --art-peach-gradient: linear-gradient(125deg, #27374e, #153a4e 55%, #18304b);
   --art-grid: #7edff214; --art-window-background: #102b3f; --art-window-shadow: #274b63;
   --art-window-line: #abd4e6; --art-orbit-line: #7ccad8; --art-orbit-fill: #204b60;
-  --panel-face: linear-gradient(110deg, #15364dee, #10283deb 72%, #193b51e8);
-  --metal-strip: linear-gradient(180deg, #305b70, #224257 45%, #456578 49%, #1b3a50);
+  --panel-face: linear-gradient(110deg, #123249b0, #10283da3 72%, #193b51ad);
+  --glass-face: linear-gradient(110deg, #10304778, #0b213666 72%, #163b5275);
+  --glass-highlight: #bcf4ff3d; --glass-shadow: #000c2229;
+  --metal-strip: linear-gradient(180deg, #305b70a3, #22425773 45%, #456578a3 49%, #1b3a5070);
   --panel-edge: #b5e6f224; --panel-shadow: #000b1c30; --frame-soft: #7dc5dd36;
   --scan-ink: #b4e5ff05;
 }
@@ -37,8 +41,10 @@
     --art-peach-gradient: linear-gradient(125deg, #27374e, #153a4e 55%, #18304b);
     --art-grid: #7edff214; --art-window-background: #102b3f; --art-window-shadow: #274b63;
     --art-window-line: #abd4e6; --art-orbit-line: #7ccad8; --art-orbit-fill: #204b60;
-    --panel-face: linear-gradient(110deg, #15364dee, #10283deb 72%, #193b51e8);
-    --metal-strip: linear-gradient(180deg, #305b70, #224257 45%, #456578 49%, #1b3a50);
+    --panel-face: linear-gradient(110deg, #123249b0, #10283da3 72%, #193b51ad);
+    --glass-face: linear-gradient(110deg, #10304778, #0b213666 72%, #163b5275);
+    --glass-highlight: #bcf4ff3d; --glass-shadow: #000c2229;
+    --metal-strip: linear-gradient(180deg, #305b70a3, #22425773 45%, #456578a3 49%, #1b3a5070);
     --panel-edge: #b5e6f224; --panel-shadow: #000b1c30; --frame-soft: #7dc5dd36;
     --scan-ink: #b4e5ff05;
   }
@@ -233,4 +239,93 @@ footer::before { left: 10%; background: var(--surface); border-color: var(--cyan
   .nav-panel:hover, .nav-panel:focus-visible, .nav-panel:active, .nav-panel.is-activating, .social-link:hover { transform: none; }
   .nav-panel:focus-visible::after, .nav-panel:hover::after, .nav-panel.is-activating::after { animation: none; }
   .ambient-background .ambient-diagonal { animation: none; }
+}
+
+/* DIGITAL GLASS: 読める半透明色を基本に、対応端末だけ軽い背景ぼかしを加える。 */
+.ambient-background::after { opacity: .4; }
+.profile, .section-heading, .social-links, .gallery, .work-card, footer { box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 0 0 3px var(--panel-edge), 0 5px 16px var(--glass-shadow); }
+.profile-frame, .section-heading::after { border-top-color: var(--glass-highlight); }
+.social-links { background: transparent; box-shadow: inset 0 1px 0 var(--glass-highlight); }
+.nav-panel, .social-link { background: var(--panel-face); box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 0 0 2px var(--panel-edge); }
+.work-art { background-color: transparent; }
+.art-blue { background-image: linear-gradient(125deg, #53ceec1c, transparent 64%, #7ac4e72b); }
+.art-peach { background-image: linear-gradient(125deg, #8a8ade1a, transparent 55%, #67d7ee21); }
+/* 子のボタン・SNSにはフィルターを重ねない。写真ステージは引き続き不透明。 */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root { --panel-face: var(--glass-face); }
+  :root[data-theme="dark"] { --panel-face: var(--glass-face); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme]) { --panel-face: var(--glass-face); } }
+  .profile, .section-heading, .gallery, .work-card, .site-header, footer {
+    -webkit-backdrop-filter: blur(3px) saturate(1.18);
+    backdrop-filter: blur(3px) saturate(1.18);
+  }
+  .social-links { background: var(--panel-face); -webkit-backdrop-filter: blur(3px) saturate(1.18); backdrop-filter: blur(3px) saturate(1.18); }
+  /* 透過面が二重になるSNSバンクでは、内側の色膜を薄くする。 */
+  .social-link { background: linear-gradient(110deg, #a7d9ee0a, #a7d9ee14); }
+}
+
+/* サービスの色は小さな接続ライン・アイコン・矢印に限定します。 */
+:root {
+  --service-x: #13779b; --service-x-active: #066c93; --service-x-tint: #32c7ec1c;
+  --service-instagram: #a73b86; --service-instagram-active: #bd278d; --service-instagram-tint: #d33dbb1c;
+  --service-spotify: #17753e; --service-spotify-active: #06883b; --service-spotify-tint: #1db9541c;
+  --service-youtube: #b12f46; --service-youtube-active: #cc2644; --service-youtube-tint: #f33a5c1c;
+  --service-github: #655485; --service-github-active: #79609f; --service-github-tint: #a197c71c;
+  --service-discord: #5054b6; --service-discord-active: #4d50d2; --service-discord-tint: #5865f21c;
+}
+:root[data-theme="dark"] {
+  --service-x: #ade6f4; --service-x-active: #d3f6ff;
+  --service-instagram: #ee91d3; --service-instagram-active: #ffb1e4;
+  --service-spotify: #65df95; --service-spotify-active: #80f5ad;
+  --service-youtube: #ff91a1; --service-youtube-active: #ffb0bc;
+  --service-github: #d1c7e8; --service-github-active: #eee5ff;
+  --service-discord: #aaa6ff; --service-discord-active: #cac7ff;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --service-x: #ade6f4; --service-x-active: #d3f6ff;
+    --service-instagram: #ee91d3; --service-instagram-active: #ffb1e4;
+    --service-spotify: #65df95; --service-spotify-active: #80f5ad;
+    --service-youtube: #ff91a1; --service-youtube-active: #ffb0bc;
+    --service-github: #d1c7e8; --service-github-active: #eee5ff;
+    --service-discord: #aaa6ff; --service-discord-active: #cac7ff;
+  }
+}
+.social-link--x { --service-accent: var(--service-x); --service-active: var(--service-x-active); --service-tint: var(--service-x-tint); }
+.social-link--instagram { --service-accent: var(--service-instagram); --service-active: var(--service-instagram-active); --service-tint: var(--service-instagram-tint); }
+.social-link--spotify { --service-accent: var(--service-spotify); --service-active: var(--service-spotify-active); --service-tint: var(--service-spotify-tint); }
+.social-link--youtube { --service-accent: var(--service-youtube); --service-active: var(--service-youtube-active); --service-tint: var(--service-youtube-tint); }
+.social-link--github { --service-accent: var(--service-github); --service-active: var(--service-github-active); --service-tint: var(--service-github-tint); }
+.social-link--discord { --service-accent: var(--service-discord); --service-active: var(--service-discord-active); --service-tint: var(--service-discord-tint); }
+.social-link { --link-accent: var(--service-accent); --link-background: var(--surface); --link-glow: var(--service-tint); }
+.social-link::before { background: var(--service-accent); opacity: .65; }
+.social-link::after { top: 0; left: 0; right: auto; width: 35%; height: 1px; background: linear-gradient(90deg, transparent, var(--service-active), var(--glass-highlight), transparent); opacity: 0; transform: translateX(-110%); pointer-events: none; }
+.social-icon { color: var(--service-accent); background: linear-gradient(135deg, var(--service-tint), transparent), var(--metal-strip); box-shadow: inset 0 0 0 1px var(--service-accent); }
+/* 抜き部分は淡いグラスの色に揃え、Spotifyの波線とDiscordの目を残す。 */
+.social-icon .icon-cutout { stroke: var(--surface); }
+.social-icon .icon-eye { fill: var(--surface); }
+.link-arrow { color: var(--service-accent); }
+.social-link:focus-visible, .social-link.is-pressed, .social-link:active { border-color: var(--service-active); background: linear-gradient(110deg, var(--service-tint), transparent 48%), var(--panel-face); box-shadow: inset 2px 0 0 var(--service-active), inset 0 1px 0 var(--glass-highlight); }
+.social-link:focus-visible .social-icon, .social-link.is-pressed .social-icon, .social-link:active .social-icon { color: var(--service-active); box-shadow: inset 0 0 0 1px var(--service-active), 0 0 9px var(--service-tint); }
+.social-link:focus-visible .link-arrow, .social-link.is-pressed .link-arrow, .social-link:active .link-arrow { color: var(--service-active); }
+.social-link:focus-visible { transform: translateY(-2px); }
+.social-link:focus-visible::after { animation: social-scan .65s ease-out 1; }
+@media (hover: hover) and (pointer: fine) {
+  .social-link:hover { transform: translateY(-2px); border-color: var(--service-active); background: linear-gradient(110deg, var(--service-tint), transparent 48%), var(--panel-face); box-shadow: inset 2px 0 0 var(--service-active), inset 0 1px 0 var(--glass-highlight); }
+  .social-link:hover .social-icon { color: var(--service-active); box-shadow: inset 0 0 0 1px var(--service-active), 0 0 9px var(--service-tint); }
+  .social-link:hover .link-arrow { color: var(--service-active); }
+  .social-link:hover::after { animation: social-scan .65s ease-out 1; }
+}
+.social-link:active, .social-link.is-pressed { transform: translateY(1px); }
+.social-link.is-pressed::after { animation: social-tap .4s ease-out 1; }
+@keyframes social-scan { 0% { transform: translateX(-110%); opacity: 0; } 20%, 70% { opacity: .7; } 100% { transform: translateX(330%); opacity: 0; } }
+@keyframes social-tap { 0% { transform: translateX(-110%); opacity: 0; } 20%, 70% { opacity: .8; } 100% { transform: translateX(330%); opacity: 0; } }
+@media (max-width: 559px) {
+  .ambient-background::after { opacity: .34; }
+  .profile, .section-heading, .gallery, .work-card, .site-header, .social-links, footer { -webkit-backdrop-filter: blur(1.5px) saturate(1.1); backdrop-filter: blur(1.5px) saturate(1.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .social-link, .social-icon { transition: none; }
+  .social-link:hover, .social-link:focus-visible, .social-link:active, .social-link.is-pressed { transform: none; }
+  .social-link::after, .social-link:hover::after, .social-link:focus-visible::after, .social-link.is-pressed::after { animation: none; }
 }
