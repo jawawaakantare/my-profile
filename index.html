@@ -96,23 +96,18 @@
         </div>
         <div class="gallery" id="tomogashima-gallery" role="region" aria-roledescription="カルーセル" aria-labelledby="album-title">
           <div class="album-heading"><h3 id="album-title">Tomogashima <span>/ 友ヶ島</span></h3><p>島を歩いて、光を集める。</p></div>
-          <button class="gallery-stage" id="gallery-stage" type="button" aria-label="写真を拡大する" aria-describedby="gallery-caption">
+          <div class="gallery-stage" id="gallery-stage" tabindex="0" aria-label="友ヶ島の写真一覧" aria-describedby="gallery-hint">
             <!-- 写真一覧はscript.jsのtomogashimaPhotosで編集します。 -->
-            <img class="gallery-slide is-active" src="assets/gallery/tomogashima/1000003477.jpg" alt="友ヶ島のアーチ型の天井と、壁に差し込む光" width="1200" height="800">
-            <span class="gallery-expand" aria-hidden="true">↗ 拡大</span>
-          </button>
-          <div class="gallery-toolbar">
-            <div class="gallery-navigation">
-              <button class="gallery-control" id="gallery-prev" type="button" aria-label="前の写真" aria-controls="gallery-stage" disabled>←</button>
-              <span class="gallery-counter" id="gallery-counter" aria-label="写真の枚数">— / —</span>
-              <button class="gallery-control" id="gallery-next" type="button" aria-label="次の写真" aria-controls="gallery-stage" disabled>→</button>
+            <div class="gallery-track" id="gallery-track">
+              <img src="assets/gallery/tomogashima/1000003477.jpg" alt="友ヶ島のアーチ型の天井と、壁に差し込む光" width="1200" height="800">
             </div>
-            <button class="gallery-playback" id="gallery-playback" type="button" aria-pressed="false" disabled>一時停止</button>
           </div>
-          <p class="gallery-caption" id="gallery-caption">Tomogashima / 友ヶ島</p>
-          <p class="gallery-hint">左右スワイプ・矢印キーでも移動できます <span id="gallery-status"></span></p>
-          <p class="sr-only" id="gallery-announcement" aria-live="polite" aria-atomic="true"></p>
-          <noscript><p class="gallery-hint">スライドショーを使うには、ブラウザーのJavaScriptを有効にしてください。</p></noscript>
+          <div class="gallery-toolbar">
+            <span class="gallery-hint" id="gallery-status" role="status"></span>
+            <button class="gallery-playback" id="gallery-playback" type="button" aria-controls="gallery-stage" aria-pressed="false" disabled>一時停止</button>
+          </div>
+          <p class="gallery-hint" id="gallery-hint">ドラッグ・左右スワイプ・矢印キーで移動 / 写真をタップして拡大</p>
+          <noscript><p class="gallery-hint">写真一覧を使うには、ブラウザーのJavaScriptを有効にしてください。</p></noscript>
         </div>
       </section>
 

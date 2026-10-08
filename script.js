@@ -22,155 +22,224 @@ const tomogashimaPhotos = [
 const gallery = document.getElementById("tomogashima-gallery");
 if (gallery) initializeGallery();
 
-function initializeGallery() {
+async function initializeGallery() {
   const stage = document.getElementById("gallery-stage");
-  const previous = document.getElementById("gallery-prev");
-  const next = document.getElementById("gallery-next");
+  const track = document.getElementById("gallery-track");
   const playback = document.getElementById("gallery-playback");
-  const counter = document.getElementById("gallery-counter");
-  const caption = document.getElementById("gallery-caption");
   const status = document.getElementById("gallery-status");
-  const announcement = document.getElementById("gallery-announcement");
   const dialog = document.getElementById("photo-dialog");
   const enlarged = document.getElementById("photo-enlarged");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const interval = 6000; // 6000ミリ秒 = 6秒。5000〜8000に変更できます。
-  const placeholder = "images/tomogashima/placeholder.svg";
-  const pauses = new Set();
-  let current = 0;
-  let requested = 0;
-  let timer;
-  let userPaused = reducedMotion.matches;
+  const loopSeconds = 50; // 写真列が1周する秒数。40〜60秒を目安に調整できます。
+  const resumeDelay = 3000;
+  const pauses = new Set(["loading"]);
+  let userPaused = false;
+  let cycleWidth = 0;
+  let offset = 0;
+  let frame = null;
+  let lastTime = null;
+  let resumeTimer;
   let resumeAfter = 0;
-  let requestId = 0;
-  let pointerStart = null;
+  let pointer = null;
   let suppressClickUntil = 0;
-  stage.disabled = true;
+  let returnFocus = null;
 
   if (!tomogashimaPhotos.length) {
-    caption.textContent = "写真は準備中です。";
-    counter.textContent = "0 / 0";
-    stage.disabled = true;
+    track.replaceChildren();
+    status.textContent = "写真は準備中です。";
     return;
   }
 
-  // 画像を先に読み込み、未配置や読み込み失敗時は仮画像に置き換えます。
-  const slides = tomogashimaPhotos.map((photo) => {
-    const image = document.createElement("img");
-    image.className = "gallery-slide";
+  // 全画像の寸法が確定してから列を複製し、読み込みによる継ぎ目のずれを防ぎます。
+  const photos = await Promise.all(tomogashimaPhotos.map(async (photo) => {
+    const image = new Image();
     image.alt = photo.alt;
-    image.width = 1200;
-    image.height = 800;
     image.draggable = false;
-    image.setAttribute("aria-hidden", "true");
-    const ready = new Promise((resolve) => {
-      image.addEventListener("load", resolve, { once: true });
-      image.addEventListener("error", () => {
+    await new Promise((resolve) => {
+      image.onload = resolve;
+      image.onerror = () => {
         if (image.dataset.placeholder) { resolve(); return; }
         image.dataset.placeholder = "true";
         image.alt = `${photo.alt}（仮画像）`;
-        image.src = placeholder;
-      });
+        image.src = "images/tomogashima/placeholder.svg";
+      };
+      image.src = photo.src;
     });
-    image.src = photo.src;
-    return { image, ready };
-  });
-  stage.querySelector("img").remove();
-  slides.forEach(({ image }) => stage.prepend(image));
-  previous.disabled = next.disabled = playback.disabled = slides.length < 2;
+    image.onload = image.onerror = null;
+    return { ...photo, image, ratio: (image.naturalWidth || 1200) / (image.naturalHeight || 800) };
+  }));
 
-  // 操作中・画面外・別タブ・拡大中はタイマーを止めます。
-  function schedule() {
-    clearTimeout(timer);
-    playback.textContent = userPaused ? "再生" : "一時停止";
-    playback.setAttribute("aria-pressed", String(userPaused));
-    status.textContent = slides.length < 2 ? "" : userPaused ? "自動再生：停止中" : pauses.size ? "自動再生：一時停止中" : `自動再生：${interval / 1000}秒ごと`;
-    if (userPaused || pauses.size || slides.length < 2) return;
-    timer = setTimeout(() => show(current + 1), Math.max(interval, resumeAfter - Date.now()));
+  function makeGroup(copy = false) {
+    const group = document.createElement("div");
+    group.className = "gallery-group";
+    if (copy) group.setAttribute("aria-hidden", "true");
+    photos.forEach((photo, index) => {
+      const card = document.createElement("figure");
+      card.className = "gallery-card";
+      card.style.setProperty("--photo-ratio", photo.ratio);
+      const button = document.createElement("button");
+      button.className = "gallery-photo";
+      button.type = "button";
+      button.dataset.index = index;
+      button.setAttribute("aria-label", `${photo.alt}を拡大する`);
+      if (copy) button.tabIndex = -1;
+      button.append(photo.image.cloneNode());
+      const expand = document.createElement("span");
+      expand.className = "gallery-expand";
+      expand.setAttribute("aria-hidden", "true");
+      expand.textContent = "↗ 拡大";
+      button.append(expand);
+      const caption = document.createElement("figcaption");
+      caption.textContent = photo.caption + (photo.image.dataset.placeholder ? " · 仮画像" : "");
+      card.append(button, caption);
+      group.append(card);
+    });
+    return group;
   }
 
-  function pause(reason, active) {
+  const original = makeGroup();
+  track.replaceChildren(original);
+
+  // 両側に同じ列を置きます。瞬間的に戻しても、画面上の写真と余白は同じ位置です。
+  function render() {
+    if (!cycleWidth) return;
+    offset = cycleWidth + ((offset - cycleWidth) % cycleWidth + cycleWidth) % cycleWidth;
+    track.style.transform = `translate3d(${-offset}px, 0, 0)`;
+  }
+
+  function measure() {
+    const phase = cycleWidth ? (offset - cycleWidth) / cycleWidth : 0;
+    cycleWidth = original.getBoundingClientRect().width;
+    if (!cycleWidth) return;
+    // 写真が少ない場合も、画面の両端まで十分に複製します。
+    const followingCopies = Math.max(2, Math.ceil(stage.clientWidth / cycleWidth) + 1);
+    track.replaceChildren(makeGroup(true), original);
+    for (let i = 0; i < followingCopies; i++) track.append(makeGroup(true));
+    offset = cycleWidth * (1 + phase);
+    render();
+    updatePlayback();
+  }
+
+  function animate(time) {
+    frame = null;
+    if (reducedMotion.matches) { updatePlayback(); return; }
+    if (lastTime !== null) {
+      // 別タブや処理の遅延後に大きく飛ばないようにします。
+      offset += cycleWidth / (loopSeconds * 1000) * Math.min(time - lastTime, 64);
+      render();
+    }
+    lastTime = time;
+    frame = requestAnimationFrame(animate);
+  }
+
+  function updatePlayback() {
+    clearTimeout(resumeTimer);
+    const waiting = performance.now() < resumeAfter;
+    const stopped = reducedMotion.matches || userPaused || photos.length < 2;
+    playback.disabled = reducedMotion.matches || photos.length < 2;
+    playback.textContent = userPaused || reducedMotion.matches ? "再生" : "一時停止";
+    playback.setAttribute("aria-pressed", String(userPaused || reducedMotion.matches));
+    status.textContent = reducedMotion.matches ? "自動スクロール：停止（動きを減らす設定）" : stopped ? "自動スクロール：停止中" : pauses.size || waiting ? "自動スクロール：一時停止中" : "自動スクロール：ゆっくり移動中";
+    if (stopped || pauses.size || waiting || !cycleWidth) {
+      if (frame !== null) cancelAnimationFrame(frame);
+      frame = null;
+      lastTime = null;
+      if (waiting && !stopped && !pauses.size) resumeTimer = setTimeout(updatePlayback, resumeAfter - performance.now());
+    } else if (frame === null) {
+      lastTime = null;
+      frame = requestAnimationFrame(animate);
+    }
+  }
+
+  function pause(reason, active, delay = false) {
     if (active) pauses.add(reason);
     else pauses.delete(reason);
-    schedule();
+    if (delay) resumeAfter = performance.now() + resumeDelay;
+    updatePlayback();
   }
 
-  async function show(index, manual = false) {
-    clearTimeout(timer);
-    const id = ++requestId;
-    const target = (index + slides.length) % slides.length;
-    requested = target;
-    pauses.add("loading");
-    if (manual) resumeAfter = Date.now() + interval;
-    await slides[target].ready;
-    if (id !== requestId) return; // 連続操作時、古い読み込み結果で戻らないようにします。
-    current = target;
-    pauses.delete("loading");
-    stage.disabled = false;
-    slides.forEach(({ image }, i) => {
-      image.classList.toggle("is-active", i === current);
-      image.setAttribute("aria-hidden", String(i !== current));
-    });
-    counter.textContent = `${current + 1} / ${slides.length}`;
-    counter.setAttribute("aria-label", `${slides.length}枚中${current + 1}枚目`);
-    const photo = tomogashimaPhotos[current];
-    caption.textContent = photo.caption + (slides[current].image.dataset.placeholder ? " · 仮画像" : "");
-    stage.setAttribute("aria-label", `${photo.alt}を拡大する`);
-    if (manual) announcement.textContent = `${counter.textContent}、${caption.textContent}`;
-    schedule();
-  }
-
-  previous.addEventListener("click", () => show(requested - 1, true));
-  next.addEventListener("click", () => show(requested + 1, true));
   playback.addEventListener("click", () => {
     userPaused = !userPaused;
-    if (!userPaused) { pauses.delete("focus"); pauses.delete("hover"); }
-    schedule();
+    pause("focus", false, true);
   });
   gallery.addEventListener("pointerenter", (event) => {
     if (event.pointerType === "mouse") pause("hover", true);
   });
-  gallery.addEventListener("pointerleave", () => pause("hover", false));
-  // タップ後に残るフォーカスでは止め続けず、キーボード操作中だけ停止します。
-  gallery.addEventListener("focusin", (event) => pause("focus", event.target.matches(":focus-visible")));
-  gallery.addEventListener("focusout", (event) => {
-    if (!gallery.contains(event.relatedTarget)) pause("focus", false);
+  gallery.addEventListener("pointerleave", (event) => {
+    if (event.pointerType === "mouse") pause("hover", false, true);
   });
-  gallery.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-      event.preventDefault();
-      show(requested + (event.key === "ArrowLeft" ? -1 : 1), true);
+  gallery.addEventListener("focusin", (event) => {
+    if (!event.target.matches(":focus-visible")) return;
+    pause("focus", true);
+    if (event.target.matches(".gallery-photo")) {
+      const card = event.target.parentElement;
+      offset = cycleWidth + card.offsetLeft - original.offsetLeft;
+      stage.scrollLeft = 0;
+      render();
     }
   });
+  gallery.addEventListener("focusout", (event) => {
+    if (!gallery.contains(event.relatedTarget)) pause("focus", false, true);
+  });
+  stage.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    event.preventDefault();
+    offset += (event.key === "ArrowLeft" ? -1 : 1) * stage.clientWidth * 0.6;
+    render();
+    pause("focus", true, true);
+  });
 
-  // 縦スクロールを妨げず、横に50px以上動いたときだけ写真を切り替えます。
+  // 横方向はドラッグ、縦方向はページスクロール。タップとドラッグを区別します。
   stage.addEventListener("pointerdown", (event) => {
-    if (!event.isPrimary || event.button !== 0) return;
-    pointerStart = { id: event.pointerId, x: event.clientX, y: event.clientY };
-    stage.setPointerCapture(event.pointerId);
+    if (!event.isPrimary || event.button !== 0 || pointer) return;
+    pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, lastX: event.clientX, dragging: false };
     pause("pointer", true);
   });
-  stage.addEventListener("pointerup", (event) => {
-    if (!pointerStart || pointerStart.id !== event.pointerId) return;
-    const dx = event.clientX - pointerStart.x;
-    const dy = event.clientY - pointerStart.y;
-    pointerStart = null;
-    pause("pointer", false);
-    if (Math.abs(dx) >= 50 && Math.abs(dx) > Math.abs(dy) * 1.3) {
-      suppressClickUntil = Date.now() + 500;
-      show(requested + (dx < 0 ? 1 : -1), true);
+  window.addEventListener("pointermove", (event) => {
+    if (!pointer || pointer.id !== event.pointerId) return;
+    const dx = event.clientX - pointer.x;
+    const dy = event.clientY - pointer.y;
+    if (!pointer.dragging && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) {
+      pointer.dragging = true;
+      stage.setPointerCapture(event.pointerId);
+      stage.classList.add("is-dragging");
     }
+    if (pointer.dragging) {
+      offset -= event.clientX - pointer.lastX;
+      render();
+    }
+    pointer.lastX = event.clientX;
   });
-  function cancelPointer() { pointerStart = null; pause("pointer", false); }
-  stage.addEventListener("pointercancel", cancelPointer);
-  stage.addEventListener("lostpointercapture", cancelPointer);
+  function finishPointer(event) {
+    if (!pointer || pointer.id !== event.pointerId) return;
+    if (pointer.dragging) suppressClickUntil = performance.now() + 500;
+    const id = pointer.id;
+    pointer = null;
+    stage.classList.remove("is-dragging");
+    if (stage.hasPointerCapture(id)) stage.releasePointerCapture(id);
+    pause("pointer", false, true);
+  }
+  window.addEventListener("pointerup", finishPointer);
+  window.addEventListener("pointercancel", finishPointer);
+  stage.addEventListener("lostpointercapture", (event) => {
+    // タッチの暗黙キャプチャを写真ボタンから枠へ移したときの通知は無視します。
+    if (event.target === stage) finishPointer(event);
+  });
+  window.addEventListener("blur", () => {
+    if (pointer) finishPointer({ pointerId: pointer.id });
+    pause("window", true);
+  });
+  window.addEventListener("focus", () => pause("window", false, true));
 
-  stage.addEventListener("click", () => {
-    if (Date.now() < suppressClickUntil) return;
+  stage.addEventListener("click", (event) => {
+    const button = event.target.closest(".gallery-photo");
+    if (!button || performance.now() < suppressClickUntil) return;
+    const photo = photos[Number(button.dataset.index)];
+    returnFocus = button;
     pause("dialog", true);
-    enlarged.src = slides[current].image.src;
-    enlarged.alt = slides[current].image.alt;
-    document.getElementById("photo-enlarged-caption").textContent = caption.textContent;
+    enlarged.src = photo.image.src;
+    enlarged.alt = photo.image.alt;
+    document.getElementById("photo-enlarged-caption").textContent = photo.caption;
     dialog.showModal();
     document.body.classList.add("photo-open");
   });
@@ -182,21 +251,18 @@ function initializeGallery() {
   });
   dialog.addEventListener("close", () => {
     document.body.classList.remove("photo-open");
-    stage.focus();
-    pause("dialog", false);
-    resumeAfter = Date.now() + interval;
-    schedule();
+    if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
+    else stage.focus({ preventScroll: true });
+    pause("dialog", false, true);
   });
   document.addEventListener("visibilitychange", () => pause("hidden", document.hidden));
   pause("hidden", document.hidden);
-  // スクロールして写真が画面外に出たときも停止します。
   if ("IntersectionObserver" in window) {
     pause("offscreen", true);
-    new IntersectionObserver(([entry]) => pause("offscreen", !entry.isIntersecting), { threshold: 0.15 }).observe(stage);
+    new IntersectionObserver(([entry]) => pause("offscreen", !entry.isIntersecting)).observe(stage);
   }
-  reducedMotion.addEventListener("change", (event) => {
-    if (event.matches) userPaused = true;
-    schedule();
-  });
-  show(0);
+  reducedMotion.addEventListener("change", updatePlayback);
+  pauses.delete("loading");
+  new ResizeObserver(measure).observe(stage);
+  measure();
 }

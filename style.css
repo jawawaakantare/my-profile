@@ -187,33 +187,36 @@ footer small { color: var(--muted); font-size: 10px; }
 .album-heading h3 { margin: 0; font-size: 16px; }
 .album-heading h3 span { color: var(--muted); font-size: 13px; font-weight: 400; }
 .album-heading p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
-.gallery-stage { position: relative; display: block; width: 100%; aspect-ratio: 4 / 3; padding: 0; overflow: hidden; border: 0; border-radius: 4px; background: var(--gallery-background); cursor: zoom-in; touch-action: pan-y pinch-zoom; }
-.gallery-slide { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 1200ms ease-in-out; pointer-events: none; }
-.gallery-slide.is-active { opacity: 1; }
-.gallery-expand { position: absolute; right: 10px; bottom: 10px; padding: 3px 8px; border-radius: 4px; background: #05070ccc; color: #fff; font-size: 11px; pointer-events: none; }
-.gallery-toolbar, .gallery-navigation { display: flex; align-items: center; gap: 8px; }
-.gallery-toolbar { justify-content: space-between; flex-wrap: wrap; margin-top: 14px; }
+.gallery-stage { --photo-height: clamp(170px, 28vw, 240px); --photo-gap: 16px; position: relative; width: 100%; overflow: hidden; border-radius: 4px; background: var(--gallery-background); cursor: grab; touch-action: pan-y pinch-zoom; user-select: none; }
+.gallery-stage.is-dragging { cursor: grabbing; }
+.gallery-track { display: flex; width: max-content; will-change: transform; }
+.gallery-group { display: flex; flex: none; gap: var(--photo-gap); padding-right: var(--photo-gap); }
+.gallery-card { flex: none; width: calc(var(--photo-height) * var(--photo-ratio)); margin: 0; }
+.gallery-photo { position: relative; display: block; width: 100%; height: var(--photo-height); padding: 0; border: 0; border-radius: 4px; background: transparent; color: inherit; cursor: inherit; }
+.gallery-photo img, .gallery-track > img { display: block; width: 100%; height: var(--photo-height); object-fit: contain; pointer-events: none; }
+.gallery-track > img { width: auto; }
+.gallery-card figcaption { margin-top: 8px; overflow: hidden; color: var(--muted); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.gallery-expand { position: absolute; right: 8px; bottom: 8px; padding: 3px 8px; border-radius: 4px; background: #05070ccc; color: #fff; font-size: 11px; pointer-events: none; }
+.gallery-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
 .gallery-control, .gallery-playback { min-width: 44px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--accent); font: inherit; font-size: 14px; cursor: pointer; transition: border-color .2s, box-shadow .2s; }
 .gallery-control:hover, .gallery-playback:hover { border-color: var(--accent); box-shadow: 0 0 12px var(--cyan-glow); }
 .gallery-control:disabled, .gallery-playback:disabled { opacity: .5; cursor: default; box-shadow: none; }
-.gallery-stage:focus-visible, .gallery-control:focus-visible, .gallery-playback:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.gallery-counter { min-width: 52px; color: var(--muted); font-size: 12px; text-align: center; font-variant-numeric: tabular-nums; }
-.gallery-caption { margin: 12px 0 0; font-size: 13px; overflow-wrap: anywhere; }
+.gallery-stage:focus-visible, .gallery-photo:focus-visible, .gallery-control:focus-visible, .gallery-playback:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
 .gallery-hint { margin: 6px 0 0; color: var(--muted); font-size: 11px; }
-#gallery-status { display: block; margin-top: 4px; }
+#gallery-status { margin: 0; }
 .photo-dialog { width: min(96vw, 1440px); max-width: 96vw; max-height: 96vh; max-height: 96dvh; padding: 56px 16px 16px; overflow: auto; border: 1px solid var(--border); border-radius: 8px; background: var(--gallery-background); color: var(--text); }
 .photo-dialog::backdrop { background: #000000e6; }
 .photo-dialog img { display: block; width: 100%; height: min(72vh, 1000px); height: min(72dvh, 1000px); object-fit: contain; }
 .photo-dialog p { margin: 12px 0 0; text-align: center; font-size: 13px; overflow-wrap: anywhere; }
 .dialog-close { position: absolute; top: 8px; right: 8px; font-size: 22px; }
 body.photo-open { overflow: hidden; }
-/* 縦写真もスマートフォンで大きく見られるよう、表示枠を縦寄りにします。 */
+/* 小さい画面でも複数の写真と、次の写真の端が見える高さにします。 */
 @media (max-width: 559px) {
-  .gallery-stage { aspect-ratio: 4 / 5; }
+  .gallery-stage { --photo-height: clamp(140px, 40vw, 180px); --photo-gap: 12px; }
 }
 @media (max-width: 400px) {
   .gallery { padding: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .gallery-slide, .gallery-control, .gallery-playback { transition: none; }
+  .gallery-control, .gallery-playback { transition: none; }
 }
