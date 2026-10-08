@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
   <script src="details.js" defer></script>
+  <script src="navigation.js" defer></script>
 </head>
 <body>
   <!-- 装飾専用の固定背景。本文・操作・読み上げには影響しません。 -->
@@ -58,7 +59,7 @@
           <img class="avatar-image" src="assets/profile.jpg" alt="じゃわわ (あかんたれ)のプロフィールイラスト" width="400" height="400">
         </div>
         <p class="eyebrow">HELLO, I'M</p>
-        <!-- 名前・自己紹介・タグは、ここを書き換えてください。 -->
+        <!-- 名前・自己紹介は、ここを書き換えてください。 -->
         <h1 id="profile-title">じゃわわ <span class="profile-nickname">(あかんたれ)</span></h1>
         <p class="bio">南大阪(山側)生まれ奈良住みの河内のおっさん←<br>
           心は永遠の和泉ナンバー◎<br>
@@ -68,14 +69,14 @@
           だいたいガジェットと配線に囲まれてたい人。<br>
           EQは死ぬほどﾄﾞﾝｼｬﾘ<br>
           ※ﾌﾟﾛﾌ画 @Lapin_Biante</p>
-        <ul class="tags" aria-label="興味のあること">
-          <li>Web learning</li>
-          <li>Photography</li>
-          <li>Everyday life</li>
-        </ul>
+        <nav class="section-nav" aria-label="ページ内ナビゲーション">
+          <a class="nav-panel" href="#network" aria-label="NETWORK：Find me onlineへ移動"><span class="nav-node" aria-hidden="true"></span><span class="nav-text"><strong>NETWORK</strong><small>EXTERNAL</small></span></a>
+          <a class="nav-panel" href="#photo-gallery" aria-label="PHOTO STREAM：Photo Galleryへ移動"><span class="nav-node" aria-hidden="true"></span><span class="nav-text"><strong>PHOTO STREAM</strong><small>GALLERY</small></span></a>
+          <a class="nav-panel" href="#work-archive" aria-label="WORK ARCHIVE：Worksへ移動"><span class="nav-node" aria-hidden="true"></span><span class="nav-text"><strong>WORK ARCHIVE</strong><small>PROJECTS</small></span></a>
+        </nav>
       </section>
 
-      <section class="links-section" aria-labelledby="links-title">
+      <section class="links-section" id="network" tabindex="-1" aria-labelledby="links-title">
         <div class="section-heading">
           <p class="system-label section-system" aria-hidden="true">NETWORK LINKS // EXTERNAL</p>
           <span class="digital-divider digital-divider--network" aria-hidden="true"><span class="divider-line"></span><span class="micro-diamond"></span><span class="divider-code">02 / SIGNAL</span></span>
@@ -123,7 +124,7 @@
         </div>
       </section>
 
-      <section class="gallery-section" id="photo-gallery" aria-labelledby="gallery-title">
+      <section class="gallery-section" id="photo-gallery" tabindex="-1" aria-labelledby="gallery-title">
         <div class="section-heading">
           <p class="system-label section-system" aria-hidden="true">PHOTO STREAM // TOMOGASHIMA</p>
           <span class="digital-divider digital-divider--stream" aria-hidden="true"><span class="divider-line"></span><span class="micro-diamond"></span><span class="divider-code">03 / FLOW</span></span>
@@ -148,7 +149,7 @@
         </div>
       </section>
 
-      <section class="works-section" aria-labelledby="works-title">
+      <section class="works-section" id="work-archive" tabindex="-1" aria-labelledby="works-title">
         <div class="section-heading">
           <p class="system-label section-system" aria-hidden="true">WORK ARCHIVE // 00X</p>
           <span class="digital-divider digital-divider--archive" aria-hidden="true"><span class="divider-line"></span><span class="micro-diamond"></span><span class="divider-code">04 / ARCHIVE</span></span>

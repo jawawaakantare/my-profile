@@ -147,8 +147,7 @@ a:focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
 h1 { margin: 0 0 14px; font-size: clamp(28px, 6vw, 40px); line-height: 1.4; letter-spacing: .02em; }
 .profile-nickname { display: inline-block; font-size: .65em; font-weight: 500; color: var(--purple); }
 .bio { max-width: 32em; margin: 0 auto; color: var(--muted); font-size: 15px; line-height: 2.1; text-align: left; overflow-wrap: anywhere; }
-.tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; padding: 0; list-style: none; }
-.tags li { padding: 4px 11px; border: 1px solid var(--border); border-radius: 20px; color: var(--muted); font-size: 11px; }
+
 
 /* SNSボタン。リンク全体がクリックできます。 */
 .section-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
@@ -372,7 +371,7 @@ body.photo-open { overflow: hidden; }
 /* View Transitions対応ブラウザーでは背景のグラデーションも一緒にクロスフェード。 */
 ::view-transition-old(root), ::view-transition-new(root), ::view-transition-group(root) { animation-duration: .28s; animation-timing-function: ease-in-out; }
 /* その他のブラウザーでも、主要な面と文字の配色を穏やかに切り替えます。 */
-body, .site-header, .wordmark, .header-note, .profile-nickname, .bio, .eyebrow, .tags li, .section-heading h2, .section-caption, .section-description, .link-label > span, .link-arrow, .gallery, .gallery-card figcaption, .gallery-hint, .photo-dialog, footer, footer small { transition: color .28s, background-color .28s, border-color .28s; }
+body, .site-header, .wordmark, .header-note, .profile-nickname, .bio, .eyebrow, .nav-panel, .section-heading h2, .section-caption, .section-description, .link-label > span, .link-arrow, .gallery, .gallery-card figcaption, .gallery-hint, .photo-dialog, footer, footer small { transition: color .28s, background-color .28s, border-color .28s; }
 .social-link { transition: transform .2s, border-color .28s, box-shadow .28s, background-color .28s, color .28s; }
 .work-card { transition: border-color .28s, box-shadow .28s, background-color .28s, color .28s; }
 .gallery-control, .gallery-playback { transition: border-color .28s, box-shadow .28s, background-color .28s, color .28s; }
@@ -478,4 +477,41 @@ footer::before { content: ""; position: absolute; left: 23%; top: -3px; width: 5
 @media (prefers-reduced-motion: reduce) {
   .status-light, .digital-divider--network .divider-line { animation: none; }
   .ambient-depth { transform: none; }
+}
+
+/* 自己紹介下の小さな端末パネル。通常のページ内リンクとしても動作します。 */
+.section-nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.nav-panel { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 46px; padding: 8px 14px; overflow: hidden; border: 1px solid var(--cyan-border); background: var(--surface); color: var(--accent); clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); text-decoration: none; box-shadow: inset 0 0 10px var(--cyan-glow); -webkit-tap-highlight-color: transparent; transition: transform .18s ease, color .28s, background-color .28s, border-color .22s, box-shadow .22s, text-shadow .22s; }
+.nav-panel::before { content: ""; position: absolute; top: 3px; left: -2px; width: 12px; height: 1px; background: var(--cyan-border); transform: rotate(-45deg); pointer-events: none; }
+.nav-panel::after { content: ""; position: absolute; left: 0; top: 45%; width: 45%; height: 1px; background: linear-gradient(90deg, transparent, var(--neon-cyan), #ffffffb3, transparent); opacity: 0; transform: translateX(-130%); pointer-events: none; }
+.nav-node { flex: none; width: 5px; height: 5px; border: 1px solid currentColor; transform: rotate(45deg); transition: transform .22s, box-shadow .22s; }
+.nav-panel:nth-child(3) .nav-node { border-color: var(--purple); }
+.nav-text { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; line-height: 1.3; }
+.nav-text strong { font-size: 10px; font-weight: 500; letter-spacing: 1.1px; }
+.nav-text small { color: var(--muted); font-size: 7px; letter-spacing: 1.2px; }
+.nav-panel:focus-visible { outline: 3px solid var(--accent); outline-offset: -4px; border-color: var(--accent); }
+@media (hover: hover) and (pointer: fine) {
+  .nav-panel:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: inset 0 0 12px var(--cyan-glow); text-shadow: 0 0 6px var(--cyan-glow); }
+  .nav-panel:hover .nav-node { transform: translateX(1px) rotate(45deg); box-shadow: 0 0 5px var(--cyan-glow); }
+  .nav-panel:hover::after { animation: nav-scan .7s ease-out 1; }
+}
+.nav-panel:active { transform: translateY(1px); background: var(--icon-background); border-color: var(--accent); }
+.nav-panel.is-activating::after { animation: nav-tap-scan .42s ease-out 1; }
+#network, #photo-gallery, #work-archive { scroll-margin-top: 42px; }
+#network:focus, #photo-gallery:focus, #work-archive:focus { outline: none; }
+#network:target .section-heading h2::before, #photo-gallery:target .section-heading h2::before, #work-archive:target .section-heading h2::before { animation: nav-arrival 2s ease-out 1; }
+@keyframes nav-scan { 0% { transform: translateX(-130%); opacity: 0; } 22%, 72% { opacity: .5; } 100% { transform: translateX(330%); opacity: 0; } }
+@keyframes nav-tap-scan { 0% { transform: translateX(-130%); opacity: 0; } 24%, 70% { opacity: .65; } 100% { transform: translateX(330%); opacity: 0; } }
+@keyframes nav-arrival { from { opacity: 1; box-shadow: 0 0 7px var(--cyan-border); } to { opacity: 1; box-shadow: 0 0 0 transparent; } }
+@media (max-width: 559px) {
+  .section-nav { gap: 8px; }
+  .nav-panel { padding-inline: 12px; }
+  #network, #photo-gallery, #work-archive { scroll-margin-top: 34px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-panel, .nav-node { transition: none; }
+  .nav-panel:hover, .nav-panel:active { transform: none; }
+  .nav-panel:hover .nav-node { transform: rotate(45deg); }
+  .nav-panel::after, .nav-panel:hover::after, .nav-panel.is-activating::after { animation: none; }
+  #network:target .section-heading h2::before, #photo-gallery:target .section-heading h2::before, #work-archive:target .section-heading h2::before { animation: none; }
 }
