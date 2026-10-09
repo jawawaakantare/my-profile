@@ -397,3 +397,45 @@ footer::before { left: 10%; background: var(--surface); border-color: var(--cyan
   .mode-select .nav-panel:hover, .mode-select .nav-panel:focus-visible, .mode-select .nav-panel:active, .mode-select .nav-panel.is-activating { transform: none; }
   .mode-select .nav-text::before, .mode-select .nav-panel::after, .mode-select .nav-panel:hover::after, .mode-select .nav-panel:focus-visible::after, .mode-select .nav-panel.is-activating::after { animation: none; opacity: 0; }
 }
+
+/* 同じセクションの見出しと内容は近く、セクション同士は既存の余白で分ける。 */
+.content-section { padding: 4px; border: 1px solid var(--border); background: linear-gradient(115deg, #9cdcea08, transparent 65%); clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px)); }
+.content-section .section-heading { margin-bottom: 4px; border-bottom-color: var(--cyan-border); clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%); }
+.content-section .section-description { margin: 6px 0 10px; padding-inline: 12px; }
+.social-link { background: linear-gradient(110deg, #c7ecf524, #77c5e82b); box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 0 0 1px var(--panel-edge); }
+
+/* 小型の機能ボタンも、ガラス面・細い枠・45度カット・同じ操作感を持たせる。 */
+:is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle) { position: relative; overflow: hidden; min-height: 44px; border: 1px solid var(--cyan-border); border-radius: 0; background: var(--panel-face); color: var(--accent); box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 0 0 2px var(--panel-edge); clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px); -webkit-tap-highlight-color: transparent; transition: transform .18s ease, border-color .22s, background-color .28s, box-shadow .22s, color .28s; }
+.bio-toggle { padding: 8px 10px; }
+.bio-toggle-label { border-bottom: 0; }
+:is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle)::after, .wordmark::after, .gallery-expand::after { content: ""; position: absolute; top: 0; left: 0; width: 35%; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), var(--glass-highlight), transparent); opacity: 0; transform: translateX(-110%); pointer-events: none; }
+:is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle):not(:disabled):focus-visible { outline: 3px solid var(--accent); outline-offset: -4px; transform: translateY(-2px); border-color: var(--accent); background: linear-gradient(110deg, #7fe8f51c, transparent), var(--panel-face); box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 0 8px var(--cyan-glow); }
+:is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle):not(:disabled):focus-visible::after, .wordmark:focus-visible::after { animation: social-scan .65s ease-out 1; }
+@media (hover: hover) and (pointer: fine) {
+  :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle):not(:disabled):hover { transform: translateY(-2px); border-color: var(--accent); background: linear-gradient(110deg, #7fe8f51c, transparent), var(--panel-face); box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 0 8px var(--cyan-glow); }
+  :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle):not(:disabled):hover::after, .wordmark:hover::after, .gallery-photo:hover .gallery-expand::after { animation: social-scan .65s ease-out 1; }
+  .gallery-photo:hover .gallery-expand { border-color: var(--accent); }
+}
+:is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle):not(:disabled):active, :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle).is-pressed { transform: translateY(1px); border-color: var(--accent); background: linear-gradient(110deg, #7fe8f526, transparent), var(--panel-face); }
+:is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle).is-pressed::after, .wordmark.is-pressed::after, .gallery-photo.is-pressed .gallery-expand::after { animation: social-tap .4s ease-out 1; }
+.gallery-playback::before { content: "Ⅱ" / ""; display: inline-block; width: 12px; margin-right: 6px; }
+.gallery-playback[aria-pressed="true"]::before { content: "▶" / ""; }
+.gallery-playback[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 -2px 0 var(--cyan-border); }
+.wordmark { position: relative; display: inline-block; padding-inline: 5px; margin-left: -6px; border: 1px solid var(--frame-soft); background: linear-gradient(110deg, #a9ddea0d, #a9ddea12); clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px); transition: transform .18s, border-color .22s, text-shadow .22s; }
+.wordmark:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; transform: translateY(-2px); border-color: var(--accent); text-shadow: 0 0 4px var(--cyan-glow); }
+@media (hover: hover) and (pointer: fine) {
+  .wordmark:hover { transform: translateY(-2px); border-color: var(--accent); text-shadow: 0 0 4px var(--cyan-glow); }
+}
+.wordmark:active, .wordmark.is-pressed { transform: translateY(1px); border-color: var(--accent); }
+/* 写真には面や移動を重ねず、拡大チップだけを操作UIの形に揃える。 */
+.gallery-expand { overflow: hidden; border: 1px solid #79cddd80; background: linear-gradient(115deg, #183c52d9, #0c2438d9); box-shadow: inset 0 1px 0 #ffffff38; clip-path: polygon(5px 0, 100% 0, 100% 100%, 0 100%, 0 5px); }
+.gallery-photo:focus-visible .gallery-expand { border-color: var(--accent); }
+.gallery-photo:focus-visible .gallery-expand::after { animation: social-scan .65s ease-out 1; }
+.gallery-photo.is-pressed .gallery-expand { transform: translateY(1px); border-color: var(--accent); }
+/* 準備中のWorksはリンクを持たない表示パネルなので、操作ボタンの発光を付けない。 */
+.work-card:hover { border-color: var(--work-border); box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 0 0 3px var(--panel-edge), 0 5px 16px var(--glass-shadow); }
+@media (prefers-reduced-motion: reduce) {
+  :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle), .wordmark { transition: none; }
+  :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle):not(:disabled):hover, :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle):not(:disabled):focus-visible, :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle):not(:disabled):active, :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle).is-pressed, .wordmark:hover, .wordmark:focus-visible, .wordmark:active, .wordmark.is-pressed, .gallery-photo.is-pressed .gallery-expand { transform: none; }
+  :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle)::after, :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle):not(:disabled):hover::after, :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle):not(:disabled):focus-visible::after, :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle).is-pressed::after, .wordmark::after, .wordmark:hover::after, .wordmark:focus-visible::after, .wordmark.is-pressed::after, .gallery-expand::after, .gallery-photo:hover .gallery-expand::after, .gallery-photo:focus-visible .gallery-expand::after, .gallery-photo.is-pressed .gallery-expand::after { animation: none; opacity: 0; }
+}

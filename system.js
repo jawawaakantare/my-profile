@@ -35,22 +35,27 @@
   configure();
 })();
 
-// 外部リンクの移動はブラウザーに任せ、タッチでも短い操作反応を残します。
+// 操作の反応だけを共通化し、移動・開閉・テーマ・再生処理には介入しません。
 (() => {
   const timers = new WeakMap();
-  document.querySelectorAll(".social-link").forEach((link) => {
-    function feedback() {
-      clearTimeout(timers.get(link));
-      link.classList.remove("is-pressed");
-      void link.offsetWidth;
-      link.classList.add("is-pressed");
-      timers.set(link, setTimeout(() => link.classList.remove("is-pressed"), 450));
-    }
-    link.addEventListener("pointerdown", (event) => {
-      if (event.isPrimary && event.button === 0) feedback();
-    });
-    link.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" && !event.repeat) feedback();
-    });
+  const controls = ".social-link, .theme-toggle, .gallery-playback, .gallery-control, .bio-toggle, .gallery-photo, .wordmark";
+
+  function feedback(control) {
+    clearTimeout(timers.get(control));
+    control.classList.remove("is-pressed");
+    void control.offsetWidth;
+    control.classList.add("is-pressed");
+    timers.set(control, setTimeout(() => control.classList.remove("is-pressed"), 450));
+  }
+
+  // 写真ボタンは画像読み込み後に生成されるため、イベントを委譲します。
+  document.addEventListener("pointerdown", (event) => {
+    const control = event.target.closest(controls);
+    if (control && !control.disabled && event.isPrimary && event.button === 0) feedback(control);
+  });
+  document.addEventListener("keydown", (event) => {
+    const control = event.target.closest(controls);
+    if (!control || control.disabled || event.repeat) return;
+    if (event.key === "Enter" || (event.key === " " && control.matches("button"))) feedback(control);
   });
 })();
