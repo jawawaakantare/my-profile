@@ -338,10 +338,10 @@ footer::before { left: 10%; background: var(--surface); border-color: var(--cyan
 @media (min-width: 560px) {
   .mode-select .nav-panel { grid-template-columns: 7px minmax(0, 1fr) 7px; }
 }
-.mode-select .nav-panel { --mode-face: linear-gradient(110deg, #d5f3fac7, #abddebba 72%, #c1e1eed1); min-width: 0; min-height: 88px; border-width: 2px; border-color: var(--cyan-border); background: var(--mode-face); box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 -1px 0 var(--accent), inset 0 0 0 2px var(--panel-edge); transform-origin: center; }
-:root[data-theme="dark"] .mode-select .nav-panel { --mode-face: linear-gradient(110deg, #174157c2, #102f46b8 72%, #1b4860c4); }
+.mode-select .nav-panel { --mode-face: linear-gradient(110deg, #cdeff9dd, #a4d8e8d6 72%, #b9deebe3); min-width: 0; min-height: 72px; padding: 16px 13px 15px; border-width: 2px; border-color: var(--cyan-border); background: var(--mode-face); box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 -1px 0 var(--accent), inset 0 0 0 2px var(--panel-edge); transform-origin: center; }
+:root[data-theme="dark"] .mode-select .nav-panel { --mode-face: linear-gradient(110deg, #164359d8, #0d2f46d1 72%, #194b63dc); }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) .mode-select .nav-panel { --mode-face: linear-gradient(110deg, #174157c2, #102f46b8 72%, #1b4860c4); }
+  :root:not([data-theme]) .mode-select .nav-panel { --mode-face: linear-gradient(110deg, #164359d8, #0d2f46d1 72%, #194b63dc); }
 }
 .mode-select .nav-panel::before { background: linear-gradient(90deg, var(--accent), var(--glass-highlight), transparent); }
 .mode-select .nav-panel:focus-visible { transform: translateY(-2px); border-color: var(--accent); background: linear-gradient(110deg, #7fe8f51c, transparent), var(--mode-face); box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 -1px 0 var(--accent), inset 0 0 8px var(--cyan-glow); }
@@ -383,9 +383,9 @@ footer::before { left: 10%; background: var(--surface); border-color: var(--cyan
   .mode-select { margin-top: 12px; padding: 8px 6px 10px; }
   .mode-select .mode-heading { margin-bottom: 8px; font-size: 9px; letter-spacing: 1.3px; }
   .mode-select .section-nav { gap: 4px; }
-  .mode-select .nav-panel { display: flex; flex-direction: column; justify-content: center; gap: 6px; min-height: 96px; padding: 20px 3px 16px; }
+  .mode-select .nav-panel { display: flex; flex-direction: column; justify-content: center; gap: 6px; min-height: 64px; padding: 16px 3px 12px; }
   .mode-select .nav-code { left: 5px; top: 4px; font-size: 6px; letter-spacing: .5px; }
-  .mode-select .nav-node { width: 5px; height: 5px; }
+  .mode-select .nav-node { position: absolute; top: 8px; right: 7px; width: 5px; height: 5px; }
   .mode-select .nav-text { display: flex; flex-direction: column; gap: 4px; width: 100%; min-width: 0; }
   .mode-select .nav-text strong { display: flex; align-items: center; justify-content: center; min-height: 30px; max-width: 100%; font-size: 11px; line-height: 1.35; letter-spacing: .45px; text-align: center; white-space: normal; }
   .mode-select .nav-text small { display: none; }
