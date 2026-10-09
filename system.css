@@ -333,14 +333,14 @@ footer::before { left: 10%; background: var(--surface); border-color: var(--cyan
 }
 
 /* 一体型MODE SELECT。最小幅320pxでも3列を保ち、主要名称を読みやすく残す。 */
-.mode-select { position: relative; margin-top: 18px; padding: 12px; border: 1px solid var(--cyan-border); border-top: 2px solid var(--accent); background: linear-gradient(115deg, #7bdcf20e, transparent 65%); box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 -1px 0 var(--cyan-border); clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
-.mode-select .mode-heading { margin: 0 0 10px; padding: 0 0 8px; border-top: 0; border-bottom: 1px solid var(--frame-soft); font-size: 10px; letter-spacing: 1.7px; }
+.mode-select { position: relative; margin-top: 18px; padding: 8px 12px; border: 1px solid var(--cyan-border); border-top: 2px solid var(--accent); background: linear-gradient(115deg, #7bdcf20e, transparent 65%); box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 -1px 0 var(--cyan-border); clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
+.mode-select .mode-heading { margin: 0 0 6px; padding: 0 0 5px; border-top: 0; border-bottom: 1px solid var(--frame-soft); font-size: 10px; letter-spacing: 1.7px; }
 .mode-select .section-nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .mode-select .nav-text { align-items: center; text-align: center; }
 @media (min-width: 560px) {
   .mode-select .nav-panel { grid-template-columns: 7px minmax(0, 1fr) 7px; }
 }
-.mode-select .nav-panel { --mode-face: linear-gradient(110deg, #e8faffdd, #b8e9ecd6 72%, #c9e0ece3); --mode-ink: #173c56; --muted: #3f5f72; --purple: #437896; min-width: 0; min-height: 72px; padding: 16px 13px 15px; border-width: 2px; border-color: var(--cyan-border); background: var(--mode-face); color: var(--mode-ink); box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 -1px 0 var(--accent), inset 0 0 0 2px var(--panel-edge); transform-origin: center; }
+.mode-select .nav-panel { --mode-face: linear-gradient(110deg, #e8faffdd, #b8e9ecd6 72%, #c9e0ece3); --mode-ink: #173c56; --muted: #3f5f72; --purple: #437896; min-width: 0; min-height: 58px; padding: 10px 13px 8px; border-width: 2px; border-color: var(--cyan-border); background: var(--mode-face); color: var(--mode-ink); box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 -1px 0 var(--accent), inset 0 0 0 2px var(--panel-edge); transform-origin: center; }
 :root[data-theme="dark"] .mode-select .nav-panel { --mode-face: linear-gradient(110deg, #f4fafdd8, #d1dde5d1 72%, #e3f0f4dc); --mode-ink: #123047; --muted: #304759; --purple: #47647c; }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) .mode-select .nav-panel { --mode-face: linear-gradient(110deg, #f4fafdd8, #d1dde5d1 72%, #e3f0f4dc); --mode-ink: #123047; --muted: #304759; --purple: #47647c; }
@@ -383,16 +383,16 @@ footer::before { left: 10%; background: var(--surface); border-color: var(--cyan
   100% { transform: translate3d(450%, 6%, 0); opacity: 0; }
 }
 @media (max-width: 559px) {
-  .mode-select { margin-top: 12px; padding: 8px 6px 10px; }
-  .mode-select .mode-heading { margin-bottom: 8px; font-size: 9px; letter-spacing: 1.3px; }
+  .mode-select { margin-top: 12px; padding: 6px 6px 7px; }
+  .mode-select .mode-heading { margin-bottom: 6px; font-size: 9px; letter-spacing: 1.3px; }
   .mode-select .section-nav { gap: 4px; }
-  .mode-select .nav-panel { display: flex; flex-direction: column; justify-content: center; gap: 6px; min-height: 64px; padding: 16px 3px 12px; }
-  .mode-select .nav-code { left: 5px; top: 4px; font-size: 6px; letter-spacing: .5px; }
+  .mode-select .nav-panel { display: flex; flex-direction: column; justify-content: center; gap: 6px; min-height: 52px; padding: 8px 3px 10px; }
+  .mode-select .nav-code { left: 5px; top: 4px; font-size: 5.5px; line-height: 1.3; letter-spacing: .5px; }
   .mode-select .nav-node { position: absolute; top: 8px; right: 7px; width: 5px; height: 5px; }
   .mode-select .nav-text { display: flex; flex-direction: column; gap: 4px; width: 100%; min-width: 0; }
   .mode-select .nav-text strong { display: flex; align-items: center; justify-content: center; min-height: 30px; max-width: 100%; font-size: 11px; line-height: 1.35; letter-spacing: .45px; text-align: center; white-space: normal; }
   .mode-select .nav-text small { display: none; }
-  .mode-select .nav-status { top: auto; bottom: 4px; right: 0; left: 0; text-align: center; font-size: 6px; letter-spacing: .7px; }
+  .mode-select .nav-status { top: auto; bottom: 2px; right: 0; left: 0; text-align: center; font-size: 5.5px; line-height: 1.2; letter-spacing: .7px; }
 }
 @media (max-width: 359px) { .mode-select .mode-heading span:last-child { display: none; } }
 @media (prefers-reduced-motion: reduce) {
