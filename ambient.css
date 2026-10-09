@@ -76,6 +76,12 @@
   .flow-readout:nth-child(3) { left: 9px; bottom: 6%; }
   .ambient-flow-light { height: 44px; animation-duration: 32s; }
 }
+/* モバイルのブラウザバーが出入りしても、模様の基準高さを変えない。
+   100vhはlvh未対応環境のフォールバック。横ループは内側に残す。 */
+@media (max-width: 559px), (hover: none) and (pointer: coarse) {
+  .ambient-background { bottom: auto; height: 100vh; height: 100lvh; }
+  .ambient-depth { transform: none; }
+}
 @media (prefers-reduced-motion: reduce) {
   .ambient-flow, .ambient-flow-grid, .ambient-flow-lines { animation: none; }
   .ambient-flow { transform: translate3d(-25%, 0, 0); }

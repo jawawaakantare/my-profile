@@ -299,6 +299,8 @@ footer::before { left: 10%; background: var(--surface); border-color: var(--cyan
 .social-link--discord { --service-accent: var(--service-discord); --service-active: var(--service-discord-active); --service-tint: var(--service-discord-tint); }
 .social-link { --link-accent: var(--service-accent); --link-background: var(--surface); --link-glow: var(--service-tint); }
 .social-link::before { background: var(--service-accent); opacity: .65; }
+/* 反射光の見えない横はみ出しで、モバイルの固定背景幅が補正されるのを防ぐ。 */
+.social-link { overflow: hidden; }
 .social-link::after { top: 0; left: 0; right: auto; width: 35%; height: 1px; background: linear-gradient(90deg, transparent, var(--service-active), var(--glass-highlight), transparent); opacity: 0; transform: translateX(-110%); pointer-events: none; }
 .social-icon { color: var(--service-accent); background: linear-gradient(135deg, var(--service-tint), transparent), var(--metal-strip); box-shadow: inset 0 0 0 1px var(--service-accent); }
 /* 抜き部分は淡いグラスの色に揃え、Spotifyの波線とDiscordの目を残す。 */
