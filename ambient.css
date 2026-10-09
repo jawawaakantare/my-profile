@@ -1,0 +1,83 @@
+/* 固定された空間の中を、同じ幅の模様が一定速度で流れる。UIは既存のまま。 */
+.ambient-flow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 400%;
+  height: 100%;
+  display: flex;
+  contain: layout paint;
+  animation: flow-left 360s linear infinite;
+}
+.ambient-tile { position: relative; flex: 0 0 25%; height: 100%; }
+.ambient-flow .ambient-diamonds { animation: none; }
+.ambient-flow .ambient-diamond::after { animation: none; }
+/* 前後のタイルからはみ出した同じ図形も含め、1画面分だけ移動して循環する。 */
+@keyframes flow-left {
+  from { transform: translate3d(-25%, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+.ambient-flow--panels { opacity: .78; }
+.ambient-flow--wire { animation-duration: 480s; animation-direction: reverse; opacity: .9; }
+.ambient-flow-grid {
+  position: absolute;
+  inset: -24px -120px;
+  background-image: linear-gradient(var(--ambient-line) 1px, transparent 1px), linear-gradient(90deg, var(--ambient-line) 1px, transparent 1px);
+  background-size: 96px 144px;
+  opacity: .55;
+  animation: flow-grid 132s linear infinite;
+}
+@keyframes flow-grid {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(96px, 0, 0); }
+}
+/* 斜め線の224px周期 × √2だけ水平移動し、巻き戻りを見せない。 */
+.ambient-flow-lines {
+  position: absolute;
+  inset: -40px -360px;
+  background: repeating-linear-gradient(135deg, transparent 0 168px, var(--diamond-line) 168px 169px, transparent 169px 224px);
+  opacity: .28;
+  animation: flow-lines 210s linear infinite;
+}
+@keyframes flow-lines {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-316.783838px, 0, 0); }
+}
+.ambient-flow--hud { color: var(--ambient-label); font: 9px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .18em; animation-duration: 600s; opacity: .7; }
+.flow-readout { position: absolute; white-space: nowrap; }
+.flow-readout:nth-child(1) { left: 5%; top: 18%; }
+.flow-readout:nth-child(2) { right: 4%; top: 58%; }
+.flow-readout:nth-child(3) { left: 11%; bottom: 8%; }
+/* 24秒のうち12秒は消灯。透明になってから出発点へ戻す。 */
+.ambient-flow-light {
+  position: absolute;
+  top: 32%;
+  left: 25%;
+  width: 55%;
+  height: 80px;
+  background: linear-gradient(180deg, transparent 18%, #8beaff14 48%, var(--ambient-light) 50%, #8beaff14 52%, transparent 82%);
+  opacity: 0;
+  animation: flow-light 24s linear infinite;
+}
+@keyframes flow-light {
+  0%, 50% { transform: translate3d(-20vw, 0, 0) rotate(-12deg); opacity: 0; }
+  60%, 88% { opacity: .07; }
+  100% { transform: translate3d(20vw, -3vh, 0) rotate(-12deg); opacity: 0; }
+}
+@media (max-width: 559px) {
+  /* 狭い画面用の既存配置を使い、装飾数・速度・線の密度を控える。 */
+  .ambient-flow--panels { animation-duration: 420s; opacity: .82; }
+  .ambient-flow--wire { animation-duration: 540s; }
+  .ambient-flow .ambient-diamond--panel:nth-child(4), .ambient-flow .ambient-diamond--wire:nth-child(3), .flow-readout:nth-child(2) { display: none; }
+  .ambient-flow-grid { background-size: 96px 192px; opacity: .35; }
+  .ambient-flow-lines { display: none; }
+  .ambient-flow--hud { font-size: 7px; letter-spacing: .12em; opacity: .5; animation-duration: 720s; }
+  .flow-readout:nth-child(1) { left: 7px; top: 36%; }
+  .flow-readout:nth-child(3) { left: 9px; bottom: 6%; }
+  .ambient-flow-light { height: 44px; animation-duration: 32s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ambient-flow, .ambient-flow-grid, .ambient-flow-lines { animation: none; }
+  .ambient-flow { transform: translate3d(-25%, 0, 0); }
+  .ambient-flow-light { display: none; animation: none; }
+}

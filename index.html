@@ -12,6 +12,7 @@
   <script src="theme.js"></script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="system.css">
+  <link rel="stylesheet" href="ambient.css">
   <script src="script.js" defer></script>
   <script src="details.js" defer></script>
   <script src="navigation.js" defer></script>
@@ -22,27 +23,28 @@
   <!-- 装飾専用の固定背景。本文・操作・読み上げには影響しません。 -->
   <div class="ambient-background" aria-hidden="true" inert>
     <div class="ambient-scanlines"></div>
-    <div class="ambient-diagonal"></div>
-    <div class="ambient-grid ambient-grid--far"></div>
-    <div class="ambient-grid ambient-grid--near"></div>
-    <div class="ambient-diamonds ambient-diamonds--panels">
-      <span class="ambient-diamond ambient-diamond--panel"></span>
-      <span class="ambient-diamond ambient-diamond--panel"></span>
-      <span class="ambient-diamond ambient-diamond--panel"></span>
-      <span class="ambient-diamond ambient-diamond--panel"></span>
+    <!-- 前後にも同じタイルを置き、画面外ではみ出すひし形まで連続させます。 -->
+    <div class="ambient-flow ambient-flow--panels">
+      <div class="ambient-tile"><div class="ambient-diamonds ambient-diamonds--panels"><span class="ambient-diamond ambient-diamond--panel"></span><span class="ambient-diamond ambient-diamond--panel"></span><span class="ambient-diamond ambient-diamond--panel"></span><span class="ambient-diamond ambient-diamond--panel"></span></div></div>
+      <div class="ambient-tile"><div class="ambient-diamonds ambient-diamonds--panels"><span class="ambient-diamond ambient-diamond--panel"></span><span class="ambient-diamond ambient-diamond--panel"></span><span class="ambient-diamond ambient-diamond--panel"></span><span class="ambient-diamond ambient-diamond--panel"></span></div></div>
+      <div class="ambient-tile"><div class="ambient-diamonds ambient-diamonds--panels"><span class="ambient-diamond ambient-diamond--panel"></span><span class="ambient-diamond ambient-diamond--panel"></span><span class="ambient-diamond ambient-diamond--panel"></span><span class="ambient-diamond ambient-diamond--panel"></span></div></div>
+      <div class="ambient-tile"><div class="ambient-diamonds ambient-diamonds--panels"><span class="ambient-diamond ambient-diamond--panel"></span><span class="ambient-diamond ambient-diamond--panel"></span><span class="ambient-diamond ambient-diamond--panel"></span><span class="ambient-diamond ambient-diamond--panel"></span></div></div>
     </div>
-    <div class="ambient-diamonds ambient-diamonds--wire">
-      <span class="ambient-diamond ambient-diamond--wire"></span>
-      <span class="ambient-diamond ambient-diamond--wire"></span>
-      <span class="ambient-diamond ambient-diamond--wire"></span>
+    <div class="ambient-flow ambient-flow--wire">
+      <div class="ambient-tile"><div class="ambient-diamonds ambient-diamonds--wire"><span class="ambient-diamond ambient-diamond--wire"></span><span class="ambient-diamond ambient-diamond--wire"></span><span class="ambient-diamond ambient-diamond--wire"></span></div></div>
+      <div class="ambient-tile"><div class="ambient-diamonds ambient-diamonds--wire"><span class="ambient-diamond ambient-diamond--wire"></span><span class="ambient-diamond ambient-diamond--wire"></span><span class="ambient-diamond ambient-diamond--wire"></span></div></div>
+      <div class="ambient-tile"><div class="ambient-diamonds ambient-diamonds--wire"><span class="ambient-diamond ambient-diamond--wire"></span><span class="ambient-diamond ambient-diamond--wire"></span><span class="ambient-diamond ambient-diamond--wire"></span></div></div>
+      <div class="ambient-tile"><div class="ambient-diamonds ambient-diamonds--wire"><span class="ambient-diamond ambient-diamond--wire"></span><span class="ambient-diamond ambient-diamond--wire"></span><span class="ambient-diamond ambient-diamond--wire"></span></div></div>
     </div>
-    <div class="ambient-particles">
-      <span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span>
+    <div class="ambient-flow-grid"></div>
+    <div class="ambient-flow-lines"></div>
+    <div class="ambient-flow ambient-flow--hud">
+      <div class="ambient-tile"><span class="flow-readout">SIGNAL / 02.04</span><span class="flow-readout">FLOW — MEMORY STREAM</span><span class="flow-readout">NODE / SYSTEM ONLINE</span></div>
+      <div class="ambient-tile"><span class="flow-readout">SIGNAL / 02.04</span><span class="flow-readout">FLOW — MEMORY STREAM</span><span class="flow-readout">NODE / SYSTEM ONLINE</span></div>
+      <div class="ambient-tile"><span class="flow-readout">SIGNAL / 02.04</span><span class="flow-readout">FLOW — MEMORY STREAM</span><span class="flow-readout">NODE / SYSTEM ONLINE</span></div>
+      <div class="ambient-tile"><span class="flow-readout">SIGNAL / 02.04</span><span class="flow-readout">FLOW — MEMORY STREAM</span><span class="flow-readout">NODE / SYSTEM ONLINE</span></div>
     </div>
-    <div class="ambient-beam ambient-beam--first"></div>
-    <div class="ambient-beam ambient-beam--second"></div>
-    <div class="ambient-telemetry"><span>SIGNAL / 02.04</span><span>FLOW — MEMORY STREAM</span><span>SYSTEM ONLINE</span></div>
+    <div class="ambient-flow-light"></div>
   </div>
   <div class="screen-hud" aria-hidden="true" inert><span>NODE / JAWAWA — SIGNAL 02.04</span><span>MEMORY STREAM // FLOW : NORMAL</span></div>
   <div class="page">

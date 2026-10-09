@@ -4,14 +4,14 @@ if (photoStreamCount && typeof tomogashimaPhotos !== "undefined") {
   photoStreamCount.textContent = `${tomogashimaPhotos.length} IMAGES`;
 }
 
-// 既存の浮遊アニメーションを包み、スクロールの微小な奥行きだけ合成します。
+// 独立した連続ループのトラックを包み、スクロールの微小な奥行きだけ合成します。
 (() => {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const compact = window.matchMedia("(max-width: 559px)");
   const layers = [
-    [".ambient-diamonds--panels", 16],
-    [".ambient-diamonds--wire", 6],
-    [".ambient-grid--far", 3],
+    [".ambient-flow--panels", 16],
+    [".ambient-flow--wire", 6],
+    [".ambient-flow-grid", 3],
   ].flatMap(([selector, distance]) => {
     const layer = document.querySelector(selector);
     if (!layer) return [];
