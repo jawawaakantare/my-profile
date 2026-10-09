@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="system.css">
   <link rel="stylesheet" href="ambient.css">
+  <link rel="stylesheet" href="profile-layout.css">
   <script src="script.js" defer></script>
   <script src="details.js" defer></script>
   <script src="navigation.js" defer></script>
@@ -65,25 +66,30 @@
         <span class="profile-frame" aria-hidden="true"></span>
         <span class="panel-index profile-index" aria-hidden="true">PERSONAL INTERFACE</span>
         <p class="system-label system-label--profile" aria-hidden="true"><span class="micro-diamond"></span> PERSONAL NODE // ID.01</p>
-        <!-- 正方形画像を比率を保ったまま円形にトリミングします。 -->
-        <div class="avatar">
-          <img class="avatar-image" src="assets/profile.jpg" alt="じゃわわ (あかんたれ)のプロフィールイラスト" width="400" height="400">
-        </div>
-        <p class="eyebrow">HELLO, I'M</p>
-        <!-- 名前・自己紹介は、ここを書き換えてください。 -->
-        <h1 id="profile-title">じゃわわ <span class="profile-nickname">(あかんたれ)</span></h1>
-        <div class="bio">
-          <p>南大阪(山側)生まれ奈良住みの河内のおっさん←<br>
-            心は永遠の和泉ナンバー◎</p>
-          <div class="bio-more" id="bio-more">
-            <p>無駄にMT車乗りたい人。<br>
-              車歴はL200S→L502S→HA21S→DE5FS。<br>
-              水曜深夜ちょっと前は板橋区民。<br>
-              だいたいガジェットと配線に囲まれてたい人。<br>
-              EQは死ぬほどﾄﾞﾝｼｬﾘ<br>
-              ※ﾌﾟﾛﾌ画 @Lapin_Biante</p>
+        <div class="profile-data">
+          <p class="eyebrow">HELLO, I'M</p>
+          <!-- 名前・自己紹介は、ここを書き換えてください。 -->
+          <h1 id="profile-title">じゃわわ <span class="profile-nickname">(あかんたれ)</span></h1>
+          <div class="bio profile-bio">
+            <p>南大阪(山側)生まれ奈良住みの河内のおっさん←<br>
+              心は永遠の和泉ナンバー◎</p>
+            <div class="bio-more" id="bio-more">
+              <p>無駄にMT車乗りたい人。<br>
+                車歴はL200S→L502S→HA21S→DE5FS。<br>
+                水曜深夜ちょっと前は板橋区民。<br>
+                だいたいガジェットと配線に囲まれてたい人。<br>
+                EQは死ぬほどﾄﾞﾝｼｬﾘ<br>
+                ※ﾌﾟﾛﾌ画 @Lapin_Biante</p>
+            </div>
+            <button class="bio-toggle" id="bio-toggle" type="button" aria-expanded="false" aria-controls="bio-more" hidden><span class="micro-diamond" aria-hidden="true"></span><span class="bio-toggle-label">その他</span></button>
           </div>
-          <button class="bio-toggle" id="bio-toggle" type="button" aria-expanded="false" aria-controls="bio-more" hidden><span class="micro-diamond" aria-hidden="true"></span><span class="bio-toggle-label">その他</span></button>
+          <div class="profile-image-node">
+            <!-- 現在の画像を、そのまま比率を保って円形に表示します。 -->
+            <div class="avatar">
+              <img class="avatar-image" src="assets/profile.jpg" alt="じゃわわ (あかんたれ)のプロフィールイラスト" width="400" height="400">
+            </div>
+            <span class="profile-image-caption" aria-hidden="true"><span class="profile-image-label">PROFILE IMAGE // </span>NODE.01</span>
+          </div>
         </div>
         <div class="mode-select">
           <div class="mode-heading" aria-hidden="true"><span>MODE SELECT</span><span>SELECT A DESTINATION <i class="micro-diamond"></i></span></div>

@@ -1,0 +1,57 @@
+/* PERSONAL DATAの試作。上部だけを左右配置し、MODE SELECTの形・サイズは維持。 */
+.profile { padding: 48px 28px 18px; }
+.profile-data {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+  column-gap: 24px;
+  align-items: start;
+  text-align: left;
+}
+.profile-data > .eyebrow { grid-column: 1; grid-row: 1; margin: 0 0 3px; }
+.profile-data > h1 { grid-column: 1; grid-row: 2; margin: 0 0 8px; line-height: 1.25; }
+/* 同じ本文・ボタンDOMを使い、展開時だけ下段の全幅へ配置する。 */
+.profile-data > .profile-bio { display: contents; line-height: 1.8; }
+.profile-bio > p { grid-column: 1; grid-row: 3; margin: 0 0 4px; }
+.profile-bio > .bio-more { grid-column: 1 / -1; grid-row: 5; width: 100%; min-width: 0; }
+.profile-bio > .bio-more > p { padding-top: 12px; margin: 10px 0 4px; border-top: 1px solid var(--frame-soft); }
+.profile-bio > .bio-toggle { grid-column: 1; grid-row: 4; justify-self: start; }
+.profile-bio > .bio-toggle[aria-expanded="true"] { grid-column: 1 / -1; grid-row: 6; }
+.profile-image-node {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1 / 4;
+  align-self: center;
+  justify-self: center;
+  width: min(100%, 210px);
+  padding: 12px 8px 8px;
+  text-align: center;
+}
+.profile-image-node::before { content: ""; position: absolute; inset: 0; border: 1px solid var(--frame-soft); background: linear-gradient(135deg, var(--glass-highlight), transparent 24%, var(--cyan-glow)); clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); pointer-events: none; opacity: .45; }
+.profile-image-node .avatar { position: relative; width: 128px; height: 128px; margin: 0 auto; }
+.profile-image-caption { position: relative; display: block; margin-top: 9px; color: var(--accent); font: 7px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .8px; white-space: nowrap; }
+.profile.is-entering > .profile-data { animation: system-content-in .34s .18s ease-out both; }
+@media (max-width: 699px) {
+  .profile-data { grid-template-columns: minmax(0, 1fr) 118px; column-gap: 16px; }
+  .profile-image-node .avatar { width: 96px; height: 96px; }
+  .profile-image-label { display: none; }
+}
+@media (max-width: 559px) {
+  .profile { padding: 43px 16px 16px; }
+  .profile-data { grid-template-columns: minmax(0, 1fr) clamp(72px, 22vw, 88px); column-gap: 10px; }
+  .profile-data > .eyebrow { font-size: 8px; letter-spacing: 1.8px; margin-bottom: 3px; }
+  .profile-data > h1 { font-size: 28px; margin-bottom: 8px; }
+  .profile-data .profile-nickname { display: block; font-size: 16px; margin-top: 2px; line-height: 1.35; }
+  .profile-data > .profile-bio { font-size: 14px; line-height: 1.75; }
+  .profile-image-node { width: 100%; padding: 0; }
+  .profile-image-node::before { inset: -5px; }
+  .profile-image-node .avatar { width: 100%; height: auto; aspect-ratio: 1; }
+  .profile-image-caption { font-size: 6px; letter-spacing: .9px; margin-top: 9px; }
+}
+@media (max-width: 359px) {
+  .profile-data > h1 { font-size: 26px; }
+  .profile-data .profile-nickname { font-size: 15px; }
+  .profile-data > .profile-bio { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .profile.is-entering > .profile-data { animation: none; }
+}
