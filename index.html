@@ -158,15 +158,15 @@
 
       <section class="gallery-section content-section" id="photo-gallery" tabindex="-1" aria-labelledby="gallery-title">
         <div class="section-heading">
-          <p class="system-label section-system" aria-hidden="true">PHOTO STREAM // TOMOGASHIMA</p>
+          <p class="system-label section-system" aria-hidden="true">PHOTO STREAM // FIELD RECORDS</p>
           <span class="panel-index" aria-hidden="true">02</span>
           <span class="digital-divider digital-divider--stream" aria-hidden="true"><span class="divider-line"></span><span class="micro-diamond"></span><span class="divider-code">02 / FLOW</span></span>
           <h2 id="gallery-title">Photo Gallery<span>.</span></h2>
           <span class="section-caption">写真の記録</span>
         </div>
         <div class="gallery" id="tomogashima-gallery" role="region" aria-roledescription="カルーセル" aria-labelledby="album-title">
-          <div class="album-heading"><span class="album-code" aria-hidden="true">FIELD RECORD / ALBUM.02</span><h3 id="album-title">Tomogashima <span>/ 友ヶ島</span></h3><p>島を歩いて、光を集める。</p></div>
-          <div class="stream-telemetry" aria-hidden="true"><span><i class="status-light"></i> STREAM : ACTIVE</span><span id="photo-stream-count">8 IMAGES</span><span>LOOP : ∞</span></div>
+          <div class="album-heading"><span class="album-code" aria-hidden="true">FIELD RECORD / ALBUM.02</span><h3 id="album-title">Tomogashima <span>/ 友ヶ島</span></h3><p>島を歩いて、光を集める。</p><p class="album-date">FIELD DATE // <time datetime="2026-08-20">2026.08.20</time></p></div>
+          <div class="stream-telemetry" aria-hidden="true"><span><i class="status-light"></i> STREAM : ACTIVE</span><span id="photo-stream-count" data-photo-count>8 IMAGES</span><span>LOOP : ∞</span></div>
           <div class="gallery-stage" id="gallery-stage" tabindex="0" aria-label="友ヶ島の写真一覧" aria-describedby="gallery-hint">
             <!-- 写真一覧はscript.jsのtomogashimaPhotosで編集します。 -->
             <div class="gallery-track" id="gallery-track">
@@ -178,6 +178,27 @@
             <button class="gallery-playback" id="gallery-playback" type="button" aria-controls="gallery-stage" aria-pressed="false" disabled>一時停止</button>
           </div>
           <p class="gallery-hint" id="gallery-hint">ドラッグ・左右スワイプ・矢印キーで移動 / 写真をタップして拡大</p>
+          <noscript><p class="gallery-hint">写真一覧を使うには、ブラウザーのJavaScriptを有効にしてください。</p></noscript>
+        </div>
+        <div class="gallery" id="kasagi-gallery" role="region" aria-roledescription="カルーセル" aria-labelledby="kasagi-album-title">
+          <div class="album-heading">
+            <span class="album-code" aria-hidden="true">FIELD RECORD / ALBUM.03</span>
+            <h3 id="kasagi-album-title">Camp in Kasagi <span>/ 笠置でキャンプ</span></h3>
+            <p>“ミラとも“と、笠置でキャンプ。</p>
+            <p class="album-date">FIELD DATE // <time datetime="2026-04-17">2026.04.17</time> - <time datetime="2026-04-18">2026.04.18</time></p>
+          </div>
+          <div class="stream-telemetry" aria-hidden="true"><span><i class="status-light"></i> STREAM : ACTIVE</span><span data-photo-count>9 IMAGES</span><span>LOOP : ∞</span></div>
+          <div class="gallery-stage" id="kasagi-gallery-stage" tabindex="0" aria-label="笠置でキャンプの写真一覧" aria-describedby="kasagi-gallery-hint">
+            <!-- 写真一覧はscript.jsのkasagiPhotosで編集します。 -->
+            <div class="gallery-track">
+              <img src="assets/gallery/camp-in-kasagi/camp-in-kasagi-01.webp" alt="笠置でキャンプの写真 01" width="1600" height="1200">
+            </div>
+          </div>
+          <div class="gallery-toolbar">
+            <span class="gallery-hint" role="status"></span>
+            <button class="gallery-playback" type="button" aria-controls="kasagi-gallery-stage" aria-pressed="false" disabled>一時停止</button>
+          </div>
+          <p class="gallery-hint" id="kasagi-gallery-hint">ドラッグ・左右スワイプ・矢印キーで移動 / 写真をタップして拡大</p>
           <noscript><p class="gallery-hint">写真一覧を使うには、ブラウザーのJavaScriptを有効にしてください。</p></noscript>
         </div>
       </section>
@@ -213,6 +234,11 @@
     <button class="gallery-control dialog-close" id="photo-close" type="button" aria-label="拡大表示を閉じる" autofocus>×</button>
     <img id="photo-enlarged" src="assets/gallery/tomogashima/1000003477.jpg" alt="友ヶ島のアーチ型の天井と、壁に差し込む光">
     <p id="photo-enlarged-caption"></p>
+  </dialog>
+  <dialog class="photo-dialog" id="kasagi-photo-dialog" aria-label="笠置でキャンプの写真を拡大表示">
+    <button class="gallery-control dialog-close" type="button" aria-label="拡大表示を閉じる" autofocus>×</button>
+    <img src="assets/gallery/camp-in-kasagi/camp-in-kasagi-01.webp" alt="笠置でキャンプの写真 01">
+    <p></p>
   </dialog>
 </body>
 </html>

@@ -19,16 +19,33 @@ const tomogashimaPhotos = [
   { src: "assets/gallery/tomogashima/1000003525.jpg", alt: "青空の下に立つ友ヶ島の白い灯台", caption: "Tomogashima — 1000003525" },
 ].sort((a, b) => a.src.localeCompare(b.src, "en"));
 
-const gallery = document.getElementById("tomogashima-gallery");
-if (gallery) initializeGallery();
+// 新しいアルバムも、写真一覧と下の設定を追加すれば同じカルーセルを使えます。
+const kasagiPhotos = Array.from({ length: 9 }, (_, index) => {
+  const number = String(index + 1).padStart(2, "0");
+  return {
+    src: `assets/gallery/camp-in-kasagi/camp-in-kasagi-${number}.webp`,
+    alt: `笠置でキャンプの写真 ${number}`,
+    caption: `Camp in Kasagi — ${number}`,
+  };
+});
 
-async function initializeGallery() {
-  const stage = document.getElementById("gallery-stage");
-  const track = document.getElementById("gallery-track");
-  const playback = document.getElementById("gallery-playback");
-  const status = document.getElementById("gallery-status");
-  const dialog = document.getElementById("photo-dialog");
-  const enlarged = document.getElementById("photo-enlarged");
+const galleryAlbums = [
+  { id: "tomogashima-gallery", photos: tomogashimaPhotos, dialogId: "photo-dialog" },
+  { id: "kasagi-gallery", photos: kasagiPhotos, dialogId: "kasagi-photo-dialog" },
+];
+galleryAlbums.forEach((album) => {
+  const gallery = document.getElementById(album.id);
+  if (gallery) initializeGallery(gallery, album.photos, album.dialogId);
+});
+
+async function initializeGallery(gallery, photoList, dialogId) {
+  // 検索範囲と再生状態をアルバム内に閉じ、別アルバムの操作と混ざらないようにします。
+  const stage = gallery.querySelector(".gallery-stage");
+  const track = gallery.querySelector(".gallery-track");
+  const playback = gallery.querySelector(".gallery-playback");
+  const status = gallery.querySelector("[role='status']");
+  const dialog = document.getElementById(dialogId);
+  const enlarged = dialog.querySelector("img");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const loopSeconds = 50; // 写真列が1周する秒数。40〜60秒を目安に調整できます。
   const resumeDelay = 3000;
@@ -44,14 +61,14 @@ async function initializeGallery() {
   let suppressClickUntil = 0;
   let returnFocus = null;
 
-  if (!tomogashimaPhotos.length) {
+  if (!photoList.length) {
     track.replaceChildren();
     status.textContent = "写真は準備中です。";
     return;
   }
 
   // 全画像の寸法が確定してから列を複製し、読み込みによる継ぎ目のずれを防ぎます。
-  const photos = await Promise.all(tomogashimaPhotos.map(async (photo) => {
+  const photos = await Promise.all(photoList.map(async (photo) => {
     const image = new Image();
     image.alt = photo.alt;
     image.draggable = false;
@@ -239,11 +256,11 @@ async function initializeGallery() {
     pause("dialog", true);
     enlarged.src = photo.image.src;
     enlarged.alt = photo.image.alt;
-    document.getElementById("photo-enlarged-caption").textContent = photo.caption;
+    dialog.querySelector("p").textContent = photo.caption;
     dialog.showModal();
     document.body.classList.add("photo-open");
   });
-  document.getElementById("photo-close").addEventListener("click", () => dialog.close());
+  dialog.querySelector(".dialog-close").addEventListener("click", () => dialog.close());
   dialog.addEventListener("click", (event) => {
     if (event.target !== dialog) return;
     const bounds = dialog.getBoundingClientRect();

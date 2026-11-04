@@ -1,8 +1,8 @@
 // 写真数の表示だけ更新します。カルーセルの移動や操作には触れません。
-const photoStreamCount = document.getElementById("photo-stream-count");
-if (photoStreamCount && typeof tomogashimaPhotos !== "undefined") {
-  photoStreamCount.textContent = `${tomogashimaPhotos.length} IMAGES`;
-}
+galleryAlbums.forEach((album) => {
+  const count = document.querySelector(`#${album.id} [data-photo-count]`);
+  if (count) count.textContent = `${album.photos.length} IMAGES`;
+});
 
 // 独立した連続ループのトラックを包み、スクロールの微小な奥行きだけ合成します。
 (() => {
