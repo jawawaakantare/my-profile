@@ -6,45 +6,153 @@ if (yearElement) {
   yearElement.textContent = new Date().getFullYear();
 }
 
-// 写真の追加・削除は、この一覧だけを編集します（表示はファイル名順）。
-// src: 写真ファイルの場所 / alt: 写真の説明 / caption: 画面に出す短い説明
-const tomogashimaPhotos = [
-  { src: "assets/gallery/tomogashima/1000003477.jpg", alt: "友ヶ島のアーチ型の天井と、壁に差し込む光", caption: "Tomogashima — 1000003477" },
-  { src: "assets/gallery/tomogashima/1000003487.jpg", alt: "友ヶ島の写真、1000003487", caption: "Tomogashima — 1000003487" },
-  { src: "assets/gallery/tomogashima/1000003493.jpg", alt: "友ヶ島の写真、1000003493", caption: "Tomogashima — 1000003493" },
-  { src: "assets/gallery/tomogashima/1000003499.jpg", alt: "友ヶ島の写真、1000003499", caption: "Tomogashima — 1000003499" },
-  { src: "assets/gallery/tomogashima/1000003502.jpg", alt: "友ヶ島の写真、1000003502", caption: "Tomogashima — 1000003502" },
-  { src: "assets/gallery/tomogashima/1000003510.jpg", alt: "友ヶ島の写真、1000003510", caption: "Tomogashima — 1000003510" },
-  { src: "assets/gallery/tomogashima/1000003518.jpg", alt: "友ヶ島の写真、1000003518", caption: "Tomogashima — 1000003518" },
-  { src: "assets/gallery/tomogashima/1000003525.jpg", alt: "青空の下に立つ友ヶ島の白い灯台", caption: "Tomogashima — 1000003525" },
-].sort((a, b) => a.src.localeCompare(b.src, "en"));
+// 選択UIと写真カルーセルを分離します。選択リストの横スワイプはブラウザーに任せます。
+if (document.getElementById("album-selector")) initializeAlbumSelect();
 
-// 新しいアルバムも、写真一覧と下の設定を追加すれば同じカルーセルを使えます。
-const kasagiPhotos = Array.from({ length: 9 }, (_, index) => {
-  const number = String(index + 1).padStart(2, "0");
-  return {
-    src: `assets/gallery/camp-in-kasagi/camp-in-kasagi-${number}.webp`,
-    alt: `笠置でキャンプの写真 ${number}`,
-    caption: `Camp in Kasagi — ${number}`,
-  };
-});
+function initializeAlbumSelect() {
+  const albums = sortAlbums(photoAlbums);
+  const selector = document.getElementById("album-selector");
+  const list = document.getElementById("album-list");
+  const panel = document.getElementById("album-panel");
+  const previous = document.getElementById("album-previous");
+  const next = document.getElementById("album-next");
+  const position = document.getElementById("album-position");
+  const announcement = document.getElementById("album-announcement");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let selected = -1;
+  let version = 0;
+  let lifecycle;
+  let animation;
+  const tabs = [];
+  document.getElementById("album-record-count").textContent = String(albums.length).padStart(2, "0") + " RECORDS";
+  previous.disabled = next.disabled = albums.length < 2;
 
-const galleryAlbums = [
-  { id: "tomogashima-gallery", photos: tomogashimaPhotos, dialogId: "photo-dialog" },
-  { id: "kasagi-gallery", photos: kasagiPhotos, dialogId: "kasagi-photo-dialog" },
-];
-galleryAlbums.forEach((album) => {
-  const gallery = document.getElementById(album.id);
-  if (gallery) initializeGallery(gallery, album.photos, album.dialogId);
-});
+  albums.forEach((album, index) => {
+    const button = document.createElement("button");
+    button.className = "album-tab";
+    button.type = "button";
+    button.id = "album-tab-" + album.id;
+    button.setAttribute("role", "tab");
+    button.setAttribute("aria-controls", "album-panel");
+    button.setAttribute("aria-selected", "false");
+    button.tabIndex = -1;
+    const code = document.createElement("span");
+    code.className = "album-tab-number";
+    code.textContent = album.number;
+    const title = document.createElement("strong");
+    title.textContent = album.title.toUpperCase();
+    const subtitle = document.createElement("span");
+    subtitle.className = "album-tab-detail";
+    subtitle.textContent = album.titleJa + " / " + album.photos.length + " IMAGES";
+    button.append(code, title, subtitle);
+    button.addEventListener("click", () => select(index));
+    button.addEventListener("keydown", (event) => {
+      let target;
+      if (event.key === "ArrowRight") target = (index + 1) % albums.length;
+      if (event.key === "ArrowLeft") target = (index - 1 + albums.length) % albums.length;
+      if (event.key === "Home") target = 0;
+      if (event.key === "End") target = albums.length - 1;
+      if (target === undefined) return;
+      event.preventDefault();
+      tabs[target].focus({ preventScroll: true });
+      select(target);
+    });
+    tabs.push(button);
+    list.append(button);
+  });
 
-async function initializeGallery(gallery, photoList, dialogId) {
+  previous.addEventListener("click", () => select((selected - 1 + albums.length) % albums.length));
+  next.addEventListener("click", () => select((selected + 1) % albums.length));
+  reducedMotion.addEventListener("change", () => {
+    if (reducedMotion.matches) animation?.finish();
+  });
+
+  async function select(index, initial = false) {
+    if (index === selected || !albums[index]) return;
+    const request = ++version;
+    const opacity = getComputedStyle(panel).opacity;
+    animation?.cancel();
+    lifecycle?.abort(); // 旧画像読み込み、rAF、タイマー、イベント、Observerをすべて解除します。
+    lifecycle = new AbortController();
+    const signal = lifecycle.signal;
+    selected = index;
+    panel.inert = true;
+    panel.setAttribute("aria-busy", "true");
+    panel.dataset.loading = "true";
+    tabs.forEach((tab, i) => {
+      tab.setAttribute("aria-selected", String(i === index));
+      tab.tabIndex = i === index ? 0 : -1;
+    });
+    position.textContent = albums[index].number + " / " + String(albums.length).padStart(2, "0");
+    if (!initial) tabs[index].scrollIntoView({ block: "nearest", inline: "nearest", behavior: reducedMotion.matches ? "auto" : "smooth" });
+
+    try {
+      if (!initial && !reducedMotion.matches && panel.animate) {
+        panel.style.opacity = opacity;
+        animation = panel.animate([{ opacity }, { opacity: 0 }], { duration: 120, fill: "forwards" });
+        await animation.finished;
+      }
+      if (request !== version) return;
+      panel.style.opacity = "0";
+      animation?.cancel();
+      const album = albums[index];
+      panel.dataset.album = album.id;
+      panel.setAttribute("aria-labelledby", tabs[index].id);
+      document.getElementById("selected-album-code").textContent = "FIELD RECORD / ALBUM." + album.number;
+      document.getElementById("album-title-text").textContent = album.title;
+      document.getElementById("album-title-ja").textContent = "/ " + album.titleJa;
+      document.getElementById("album-description").textContent = album.description;
+      document.getElementById("album-date-value").textContent = album.displayDate || "DATE UNKNOWN";
+      document.getElementById("photo-stream-count").textContent = album.photos.length + " IMAGES";
+      const stage = panel.querySelector(".gallery-stage");
+      stage.setAttribute("aria-label", album.titleJa + "の写真一覧");
+      panel.querySelector("[role='status']").textContent = "写真を読み込み中…";
+      const fallback = document.createElement("img");
+      if (album.photos[0]) {
+        fallback.src = album.photos[0].src;
+        fallback.alt = album.photos[0].alt;
+      }
+      panel.querySelector(".gallery-track").replaceChildren(...(album.photos.length ? [fallback] : []));
+      panel.querySelector(".gallery-playback").disabled = true;
+      const dialog = document.getElementById("photo-dialog");
+      dialog.setAttribute("aria-label", album.titleJa + "の写真を拡大表示");
+      await initializeGallery(panel, album.photos, dialog, signal);
+      if (request !== version || signal.aborted) return;
+      panel.dataset.loading = "false";
+      // 読み込み中は選択パネルのフォーカスを維持し、新しい写真へ勝手に移動しません。
+      if (!initial && !reducedMotion.matches && panel.animate) {
+        animation = panel.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 130, fill: "forwards" });
+        await animation.finished;
+      }
+      if (request !== version) return;
+      panel.style.opacity = "";
+      animation?.cancel();
+      panel.inert = false;
+      panel.setAttribute("aria-busy", "false");
+      if (!initial) announcement.textContent = album.number + "、" + album.title + " / " + album.titleJa + "、" + album.displayDate + "、" + album.photos.length + "枚";
+    } catch (error) {
+      if (request !== version || signal.aborted || error.name === "AbortError") return;
+      panel.style.opacity = "";
+      panel.inert = false;
+      panel.setAttribute("aria-busy", "false");
+      panel.dataset.loading = "false";
+      panel.querySelector("[role='status']").textContent = "写真の読み込みに失敗しました。別のアルバムを選択してください。";
+      console.error(error);
+    }
+  }
+  if (albums.length) select(0, true);
+  else {
+    selector.hidden = true;
+    panel.querySelector("[role='status']").textContent = "アルバムは準備中です。";
+  }
+}
+
+async function initializeGallery(gallery, photoList, dialog, signal) {
   // 検索範囲と再生状態をアルバム内に閉じ、別アルバムの操作と混ざらないようにします。
   const stage = gallery.querySelector(".gallery-stage");
   const track = gallery.querySelector(".gallery-track");
   const playback = gallery.querySelector(".gallery-playback");
   const status = gallery.querySelector("[role='status']");
-  const dialog = document.getElementById(dialogId);
   const enlarged = dialog.querySelector("img");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const loopSeconds = 50; // 写真列が1周する秒数。40〜60秒を目安に調整できます。
@@ -60,6 +168,24 @@ async function initializeGallery(gallery, photoList, dialogId) {
   let pointer = null;
   let suppressClickUntil = 0;
   let returnFocus = null;
+  let resizeObserver;
+  let visibilityObserver;
+  function listen(target, type, callback) {
+    target.addEventListener(type, callback, { signal });
+  }
+  signal.addEventListener("abort", () => {
+    cancelAnimationFrame(frame);
+    clearTimeout(resumeTimer);
+    resizeObserver?.disconnect();
+    visibilityObserver?.disconnect();
+    const captured = pointer?.id;
+    pointer = null;
+    if (captured !== undefined && stage.hasPointerCapture(captured)) stage.releasePointerCapture(captured);
+    stage.classList.remove("is-dragging");
+    if (dialog.open) dialog.close();
+    document.body.classList.remove("photo-open");
+    track.style.transform = "";
+  }, { once: true });
 
   if (!photoList.length) {
     track.replaceChildren();
@@ -73,9 +199,15 @@ async function initializeGallery(gallery, photoList, dialogId) {
     image.alt = photo.alt;
     image.draggable = false;
     await new Promise((resolve) => {
-      image.onload = resolve;
+      function cancelLoad() {
+        image.onload = image.onerror = null;
+        image.removeAttribute("src");
+        resolve();
+      }
+      signal.addEventListener("abort", cancelLoad, { once: true });
+      image.onload = () => { signal.removeEventListener("abort", cancelLoad); resolve(); };
       image.onerror = () => {
-        if (image.dataset.placeholder) { resolve(); return; }
+        if (image.dataset.placeholder) { signal.removeEventListener("abort", cancelLoad); resolve(); return; }
         image.dataset.placeholder = "true";
         image.alt = `${photo.alt}（仮画像）`;
         image.src = "images/tomogashima/placeholder.svg";
@@ -85,6 +217,8 @@ async function initializeGallery(gallery, photoList, dialogId) {
     image.onload = image.onerror = null;
     return { ...photo, image, ratio: (image.naturalWidth || 1200) / (image.naturalHeight || 800) };
   }));
+
+  if (signal.aborted) return;
 
   function makeGroup(copy = false) {
     const group = document.createElement("div");
@@ -125,6 +259,7 @@ async function initializeGallery(gallery, photoList, dialogId) {
   }
 
   function measure() {
+    if (signal.aborted) return;
     const phase = cycleWidth ? (offset - cycleWidth) / cycleWidth : 0;
     cycleWidth = original.getBoundingClientRect().width;
     if (!cycleWidth) return;
@@ -139,6 +274,7 @@ async function initializeGallery(gallery, photoList, dialogId) {
 
   function animate(time) {
     frame = null;
+    if (signal.aborted) return;
     if (reducedMotion.matches) { updatePlayback(); return; }
     if (lastTime !== null) {
       // 別タブや処理の遅延後に大きく飛ばないようにします。
@@ -150,6 +286,7 @@ async function initializeGallery(gallery, photoList, dialogId) {
   }
 
   function updatePlayback() {
+    if (signal.aborted) return;
     clearTimeout(resumeTimer);
     const waiting = performance.now() < resumeAfter;
     const stopped = reducedMotion.matches || userPaused || photos.length < 2;
@@ -175,17 +312,17 @@ async function initializeGallery(gallery, photoList, dialogId) {
     updatePlayback();
   }
 
-  playback.addEventListener("click", () => {
+  listen(playback, "click", () => {
     userPaused = !userPaused;
     pause("focus", false, true);
   });
-  gallery.addEventListener("pointerenter", (event) => {
+  listen(gallery, "pointerenter", (event) => {
     if (event.pointerType === "mouse") pause("hover", true);
   });
-  gallery.addEventListener("pointerleave", (event) => {
+  listen(gallery, "pointerleave", (event) => {
     if (event.pointerType === "mouse") pause("hover", false, true);
   });
-  gallery.addEventListener("focusin", (event) => {
+  listen(gallery, "focusin", (event) => {
     if (!event.target.matches(":focus-visible")) return;
     pause("focus", true);
     if (event.target.matches(".gallery-photo")) {
@@ -195,10 +332,10 @@ async function initializeGallery(gallery, photoList, dialogId) {
       render();
     }
   });
-  gallery.addEventListener("focusout", (event) => {
+  listen(gallery, "focusout", (event) => {
     if (!gallery.contains(event.relatedTarget)) pause("focus", false, true);
   });
-  stage.addEventListener("keydown", (event) => {
+  listen(stage, "keydown", (event) => {
     if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
     event.preventDefault();
     offset += (event.key === "ArrowLeft" ? -1 : 1) * stage.clientWidth * 0.6;
@@ -207,12 +344,12 @@ async function initializeGallery(gallery, photoList, dialogId) {
   });
 
   // 横方向はドラッグ、縦方向はページスクロール。タップとドラッグを区別します。
-  stage.addEventListener("pointerdown", (event) => {
+  listen(stage, "pointerdown", (event) => {
     if (!event.isPrimary || event.button !== 0 || pointer) return;
     pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, lastX: event.clientX, dragging: false };
     pause("pointer", true);
   });
-  window.addEventListener("pointermove", (event) => {
+  listen(window, "pointermove", (event) => {
     if (!pointer || pointer.id !== event.pointerId) return;
     const dx = event.clientX - pointer.x;
     const dy = event.clientY - pointer.y;
@@ -236,19 +373,19 @@ async function initializeGallery(gallery, photoList, dialogId) {
     if (stage.hasPointerCapture(id)) stage.releasePointerCapture(id);
     pause("pointer", false, true);
   }
-  window.addEventListener("pointerup", finishPointer);
-  window.addEventListener("pointercancel", finishPointer);
-  stage.addEventListener("lostpointercapture", (event) => {
+  listen(window, "pointerup", finishPointer);
+  listen(window, "pointercancel", finishPointer);
+  listen(stage, "lostpointercapture", (event) => {
     // タッチの暗黙キャプチャを写真ボタンから枠へ移したときの通知は無視します。
     if (event.target === stage) finishPointer(event);
   });
-  window.addEventListener("blur", () => {
+  listen(window, "blur", () => {
     if (pointer) finishPointer({ pointerId: pointer.id });
     pause("window", true);
   });
-  window.addEventListener("focus", () => pause("window", false, true));
+  listen(window, "focus", () => pause("window", false, true));
 
-  stage.addEventListener("click", (event) => {
+  listen(stage, "click", (event) => {
     const button = event.target.closest(".gallery-photo");
     if (!button || performance.now() < suppressClickUntil) return;
     const photo = photos[Number(button.dataset.index)];
@@ -260,26 +397,28 @@ async function initializeGallery(gallery, photoList, dialogId) {
     dialog.showModal();
     document.body.classList.add("photo-open");
   });
-  dialog.querySelector(".dialog-close").addEventListener("click", () => dialog.close());
-  dialog.addEventListener("click", (event) => {
+  listen(dialog.querySelector(".dialog-close"), "click", () => dialog.close());
+  listen(dialog, "click", (event) => {
     if (event.target !== dialog) return;
     const bounds = dialog.getBoundingClientRect();
     if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
   });
-  dialog.addEventListener("close", () => {
+  listen(dialog, "close", () => {
     document.body.classList.remove("photo-open");
     if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
     else stage.focus({ preventScroll: true });
     pause("dialog", false, true);
   });
-  document.addEventListener("visibilitychange", () => pause("hidden", document.hidden));
+  listen(document, "visibilitychange", () => pause("hidden", document.hidden));
   pause("hidden", document.hidden);
   if ("IntersectionObserver" in window) {
     pause("offscreen", true);
-    new IntersectionObserver(([entry]) => pause("offscreen", !entry.isIntersecting)).observe(stage);
+    visibilityObserver = new IntersectionObserver(([entry]) => pause("offscreen", !entry.isIntersecting));
+    visibilityObserver.observe(stage);
   }
-  reducedMotion.addEventListener("change", updatePlayback);
+  listen(reducedMotion, "change", updatePlayback);
   pauses.delete("loading");
-  new ResizeObserver(measure).observe(stage);
+  resizeObserver = new ResizeObserver(measure);
+  resizeObserver.observe(stage);
   measure();
 }

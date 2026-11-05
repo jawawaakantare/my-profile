@@ -1,22 +1,24 @@
 /* オリジナルの2000年代デジタル端末スキン。内容・カルーセルの寸法と動作は別管理。 */
 :root {
   --text: #203b50; --muted: #486174; --accent: #086b88; --purple: #3276a1;
-  --magenta: #9a5283; --surface: #f6fcff; --border: #adcbd8; --cyan-border: #81bfd0;
+  --magenta: #9a5283; --surface: #f8fdff; --border: #adcbd8; --cyan-border: #76bfd6;
   --icon-background: #e1f3f8; --purple-background: #e9f2fc; --magenta-background: #eef2f9;
   --gallery-background: #eaf4fa; --status-background: #e4f2f9;
   --art-blue-gradient: linear-gradient(125deg, #caf1fa, #e0edf4 60%, #bce4f3);
   --art-peach-gradient: linear-gradient(125deg, #e1eafa, #cde9f4 55%, #effaff);
   --art-grid: #2a769514; --art-window-background: #f1fbff; --art-window-shadow: #aed0df;
   --art-window-line: #3276a1; --art-orbit-line: #548daf; --art-orbit-fill: #cfebf5;
-  --panel-face: linear-gradient(110deg, #ffffffa8, #e6f5fb85 72%, #dcecf5a3);
-  --glass-face: linear-gradient(110deg, #ffffff66, #dff2fb4d 72%, #d3eaf559);
-  --glass-highlight: #ffffff9c; --glass-shadow: #315d7e16;
-  --metal-strip: linear-gradient(180deg, #fcffffa8, #e7f1f770 45%, #c7dce78a 49%, #eaf6fc70);
+  --panel-face: linear-gradient(110deg, #ffffffcf, #e5f7ffad 72%, #e7f1ffb8);
+  --glass-face: linear-gradient(110deg, #ffffffa3, #e4f7ff78 72%, #e6efff82);
+  --glass-highlight: #ffffffe0; --glass-shadow: #315d7e16;
+  --metal-strip: linear-gradient(180deg, #ffffffdb, #eefaffad 45%, #b9dfee96 49%, #f1fcffa8);
+  --crystal-rim: #faffff; --crystal-sky: #159bd0; --crystal-top: #ffffffc9;
+  --crystal-violet: #b4a8f32b; --crystal-pink: #f4b8dc24; --crystal-bevel: #8edaf373;
   --panel-edge: #ffffffd9; --panel-shadow: #75a4be16; --frame-soft: #96c1d44d;
   --scan-ink: #18598105;
 }
 :root[data-theme="dark"] {
-  --text: #e5f2fa; --muted: #a5bfd0; --accent: #7ae3ed; --purple: #acd5e8;
+  --text: #e5f2fa; --muted: #a5bfd0; --accent: #8be6f7; --purple: #acd5e8;
   --magenta: #c49aba; --surface: #122b40; --border: #355b70; --cyan-border: #387f91;
   --icon-background: #173b50; --purple-background: #1a344d; --magenta-background: #24394e;
   --gallery-background: #0c2033; --status-background: #1a3b50;
@@ -25,15 +27,17 @@
   --art-grid: #7edff214; --art-window-background: #102b3f; --art-window-shadow: #274b63;
   --art-window-line: #abd4e6; --art-orbit-line: #7ccad8; --art-orbit-fill: #204b60;
   --panel-face: linear-gradient(110deg, #123249b0, #10283da3 72%, #193b51ad);
-  --glass-face: linear-gradient(110deg, #10304778, #0b213666 72%, #163b5275);
-  --glass-highlight: #bcf4ff3d; --glass-shadow: #000c2229;
+  --glass-face: linear-gradient(110deg, #153c567d, #0b21366e 72%, #1b36577a);
+  --glass-highlight: #cef6ff68; --glass-shadow: #000c2229;
+  --crystal-rim: #dcf8ff96; --crystal-sky: #70dcf5; --crystal-top: #d4f6ff26;
+  --crystal-violet: #b49aef16; --crystal-pink: #ef9dc31a; --crystal-bevel: #7dd5f53d;
   --metal-strip: linear-gradient(180deg, #305b70a3, #22425773 45%, #456578a3 49%, #1b3a5070);
   --panel-edge: #b5e6f224; --panel-shadow: #000b1c30; --frame-soft: #7dc5dd36;
   --scan-ink: #b4e5ff05;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
-    --text: #e5f2fa; --muted: #a5bfd0; --accent: #7ae3ed; --purple: #acd5e8;
+    --text: #e5f2fa; --muted: #a5bfd0; --accent: #8be6f7; --purple: #acd5e8;
     --magenta: #c49aba; --surface: #122b40; --border: #355b70; --cyan-border: #387f91;
     --icon-background: #173b50; --purple-background: #1a344d; --magenta-background: #24394e;
     --gallery-background: #0c2033; --status-background: #1a3b50;
@@ -42,8 +46,10 @@
     --art-grid: #7edff214; --art-window-background: #102b3f; --art-window-shadow: #274b63;
     --art-window-line: #abd4e6; --art-orbit-line: #7ccad8; --art-orbit-fill: #204b60;
     --panel-face: linear-gradient(110deg, #123249b0, #10283da3 72%, #193b51ad);
-    --glass-face: linear-gradient(110deg, #10304778, #0b213666 72%, #163b5275);
-    --glass-highlight: #bcf4ff3d; --glass-shadow: #000c2229;
+    --glass-face: linear-gradient(110deg, #153c567d, #0b21366e 72%, #1b36577a);
+    --glass-highlight: #cef6ff68; --glass-shadow: #000c2229;
+    --crystal-rim: #dcf8ff96; --crystal-sky: #70dcf5; --crystal-top: #d4f6ff26;
+    --crystal-violet: #b49aef16; --crystal-pink: #ef9dc31a; --crystal-bevel: #7dd5f53d;
     --metal-strip: linear-gradient(180deg, #305b70a3, #22425773 45%, #456578a3 49%, #1b3a5070);
     --panel-edge: #b5e6f224; --panel-shadow: #000b1c30; --frame-soft: #7dc5dd36;
     --scan-ink: #b4e5ff05;
@@ -140,7 +146,6 @@ h1 { font-size: clamp(28px, 5vw, 38px); }
 .gallery { position: relative; border-radius: 0; border-color: var(--cyan-border); padding: 20px; background: var(--panel-face); box-shadow: inset 0 0 0 4px var(--panel-edge); clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px); }
 .album-heading { position: relative; border-left: 2px solid var(--cyan-border); padding-left: 12px; margin-bottom: 14px; }
 .album-code { display: block; font-size: 7px; color: var(--accent); letter-spacing: 1.4px; margin-bottom: 5px; }
-.gallery + .gallery { margin-top: 20px; }
 .album-heading .album-date { margin-top: 8px; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 11px; line-height: 1.8; letter-spacing: .5px; overflow-wrap: anywhere; }
 .album-heading h3 { font-size: 20px; font-weight: 500; letter-spacing: .5px; }
 .stream-telemetry { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 0; margin: 0 0 16px; border: 1px solid var(--border); opacity: 1; background: var(--metal-strip); font-size: 8px; }
@@ -173,17 +178,9 @@ footer::before { left: 10%; background: var(--surface); border-color: var(--cyan
 .ambient-diagonal { position: absolute; inset: -15%; background: repeating-linear-gradient(135deg, transparent 0 240px, var(--ambient-line) 240px 241px, transparent 241px 360px); animation: system-drift 190s ease-in-out infinite alternate; opacity: .55; }
 @keyframes system-drift { from { transform: translate3d(12px, -12px, 0); } to { transform: translate3d(-16px, 16px, 0); } }
 
-/* 0〜180msライン、80〜260msノード、120〜340msフレーム、180〜520ms本文。 */
+/* 通常時のフレーム。起動演出は専用の装飾レイヤーで行います。 */
 .section-heading::before { content: ""; position: absolute; top: 0; left: 0; right: 14px; height: 1px; background: var(--accent); transform-origin: left; }
 .section-heading::after { content: ""; position: absolute; inset: 4px; border: 1px solid var(--frame-soft); pointer-events: none; }
-.is-entering .section-heading::before, .profile.is-entering::before { animation: system-line-in .18s ease-out both; }
-.is-entering .section-heading .micro-diamond, .is-entering .system-label--profile .micro-diamond { animation: system-node-in .18s .08s ease-out both; }
-.is-entering .section-heading::after, .profile.is-entering .profile-frame { animation: system-frame-in .22s .12s ease-out both; }
-.is-entering .social-link, .is-entering .gallery, .is-entering .work-card, .is-entering > .avatar, .is-entering > .eyebrow, .is-entering > h1, .is-entering > .bio, .is-entering > .mode-select { animation: system-content-in .34s .18s ease-out both; }
-@keyframes system-line-in { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-@keyframes system-node-in { from { opacity: .2; } to { opacity: 1; } }
-@keyframes system-frame-in { from { transform: scaleX(.04); opacity: .2; } to { transform: scaleX(1); opacity: 1; } }
-@keyframes system-content-in { from { opacity: 0; transform: translate3d(0, 5px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
 
 @media (min-width: 700px) { .social-links { grid-template-columns: repeat(2, minmax(0, 1fr)); } .social-link { padding-left: 59px; padding-right: 12px; gap: 10px; } .social-link::before { left: 49px; } .social-icon { flex-basis: 38px; width: 38px; height: 38px; } .social-link .link-label > span { font-size: 10px; } }
 @media (max-width: 900px) { .screen-hud { display: none; } }
@@ -236,7 +233,6 @@ footer::before { left: 10%; background: var(--surface); border-color: var(--cyan
 }
 @media (max-width: 359px) { .section-caption { font-size: 8px; } .section-heading h2 { font-size: 18px; } .nav-text small { font-size: 6px; letter-spacing: .8px; } }
 @media (prefers-reduced-motion: reduce) {
-  .page .is-entering *, .page .is-entering::before, .page .is-entering *::before, .page .is-entering *::after { animation: none; }
   .nav-panel, .nav-node { transition: none; }
   .nav-panel:hover, .nav-panel:focus-visible, .nav-panel:active, .nav-panel.is-activating, .social-link:hover { transform: none; }
   .nav-panel:focus-visible::after, .nav-panel:hover::after, .nav-panel.is-activating::after { animation: none; }
@@ -343,9 +339,19 @@ footer::before { left: 10%; background: var(--surface); border-color: var(--cyan
   .mode-select .nav-panel { grid-template-columns: 7px minmax(0, 1fr) 7px; }
 }
 .mode-select .nav-panel { --mode-face: linear-gradient(110deg, #e8faffdd, #b8e9ecd6 72%, #c9e0ece3); --mode-ink: #173c56; --muted: #3f5f72; --purple: #437896; min-width: 0; min-height: 58px; padding: 10px 13px 8px; border-width: 2px; border-color: var(--cyan-border); background: var(--mode-face); color: var(--mode-ink); box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 -1px 0 var(--accent), inset 0 0 0 2px var(--panel-edge); transform-origin: center; }
-:root[data-theme="dark"] .mode-select .nav-panel { --mode-face: linear-gradient(110deg, #f4fafdd8, #d1dde5d1 72%, #e3f0f4dc); --mode-ink: #123047; --muted: #304759; --purple: #47647c; }
+:root[data-theme="dark"] .mode-select .nav-panel {
+  --mode-face: linear-gradient(110deg, #467b964f, #28617c66 72%, #689bb54d);
+  --mode-ink: #e6f6ff; --muted: #bfd7e6; --purple: #aed2e9;
+  --crystal-top: #e4faff2b; --crystal-rim: #d9f8ffba; --crystal-sky: #8feaff;
+  --crystal-bevel: #123e5f; --glass-highlight: #c8f5ff50; --panel-edge: #9dd3ed1c;
+}
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) .mode-select .nav-panel { --mode-face: linear-gradient(110deg, #f4fafdd8, #d1dde5d1 72%, #e3f0f4dc); --mode-ink: #123047; --muted: #304759; --purple: #47647c; }
+  :root:not([data-theme]) .mode-select .nav-panel {
+    --mode-face: linear-gradient(110deg, #467b964f, #28617c66 72%, #689bb54d);
+    --mode-ink: #e6f6ff; --muted: #bfd7e6; --purple: #aed2e9;
+    --crystal-top: #e4faff2b; --crystal-rim: #d9f8ffba; --crystal-sky: #8feaff;
+    --crystal-bevel: #123e5f; --glass-highlight: #c8f5ff50; --panel-edge: #9dd3ed1c;
+  }
 }
 .mode-select .nav-panel .nav-state-active { color: var(--mode-ink); }
 .mode-select .nav-panel::before { background: linear-gradient(90deg, var(--accent), var(--glass-highlight), transparent); }
@@ -442,4 +448,159 @@ footer::before { left: 10%; background: var(--surface); border-color: var(--cyan
   :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle), .wordmark { transition: none; }
   :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle):not(:disabled):hover, :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle):not(:disabled):focus-visible, :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle):not(:disabled):active, :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle).is-pressed, .wordmark:hover, .wordmark:focus-visible, .wordmark:active, .wordmark.is-pressed, .gallery-photo.is-pressed .gallery-expand { transform: none; }
   :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle)::after, :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle):not(:disabled):hover::after, :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle):not(:disabled):focus-visible::after, :is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle).is-pressed::after, .wordmark::after, .wordmark:hover::after, .wordmark:focus-visible::after, .wordmark.is-pressed::after, .gallery-expand::after, .gallery-photo:hover .gallery-expand::after, .gallery-photo:focus-visible .gallery-expand::after, .gallery-photo.is-pressed .gallery-expand::after { animation: none; opacity: 0; }
+}
+
+/* ALBUM SELECT：高さを固定したレコード列。写真のドラッグ領域とは別にします。 */
+#photo-gallery { min-width: 0; }
+.album-selector { margin: 8px 12px 10px; padding: 8px 12px; min-width: 0; border: 1px solid var(--cyan-border); border-top: 2px solid var(--accent); background: var(--panel-face); box-shadow: inset 0 1px 0 var(--glass-highlight), inset 0 0 0 3px var(--panel-edge); clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px)); backdrop-filter: blur(3px) saturate(1.18); }
+.album-select-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+.album-select-heading h3 { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 1px; color: var(--text); }
+.album-select-heading h3 > span { color: var(--muted); font-size: 10px; font-weight: 400; letter-spacing: .5px; }
+.album-position { color: var(--accent); font-size: 11px; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
+.album-select-navigation { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; align-items: center; gap: 8px; min-width: 0; }
+.album-list { display: flex; gap: 8px; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: 2px 2px 6px; scrollbar-width: thin; scrollbar-color: var(--cyan-border) transparent; overscroll-behavior-x: contain; }
+.album-arrow { width: 44px; min-height: 48px; padding: 8px; }
+.album-tab { position: relative; isolation: isolate; overflow: hidden; flex: 0 0 clamp(128px, 28vw, 216px); display: grid; grid-template-columns: 16px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) 14px; gap: 2px 6px; min-width: 0; height: 64px; padding: 6px 9px; border: 1px solid var(--border); border-left-width: 3px; background: var(--surface); color: var(--text); text-align: left; font: inherit; cursor: pointer; clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%); transition: border-color .18s, background-color .18s, box-shadow .18s; -webkit-tap-highlight-color: transparent; }
+.album-tab::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(115deg, var(--cyan-glow), transparent 75%); opacity: .25; pointer-events: none; }
+.album-tab-number { grid-column: 1; grid-row: 2; align-self: start; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; color: var(--muted); font-size: 10px; letter-spacing: .5px; }
+.album-tab strong { grid-column: 1 / -1; grid-row: 1; align-self: center; font-size: 12px; line-height: 1.3; font-weight: 600; letter-spacing: .5px; overflow-wrap: anywhere; }
+.album-tab-detail { grid-column: 2; grid-row: 2; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--muted); font-size: 10px; line-height: 1.4; }
+.album-tab[aria-selected="true"] { border-color: var(--accent); background: var(--icon-background); box-shadow: inset 0 -2px 0 var(--accent), inset 0 1px 0 var(--glass-highlight), 0 0 10px var(--cyan-glow); }
+.album-tab[aria-selected="true"] .album-tab-number { color: var(--accent); }
+.album-tab[aria-selected="true"]::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(110deg, transparent 30%, var(--glass-highlight) 50%, transparent 70%); animation: album-select-sheen 250ms ease-out both; }
+.album-tab:hover { border-color: var(--accent); }
+.album-tab:focus-visible { outline: 3px solid var(--accent); outline-offset: -5px; border-color: var(--accent); }
+.album-select-hint { margin: 4px 0 0; font-size: 10px; color: var(--muted); }
+.album-panel { min-width: 0; }
+.album-panel:focus-visible { outline: 2px solid var(--accent); outline-offset: -5px; }
+.album-panel .album-heading #album-title-text { font: inherit; color: inherit; }
+.album-panel .album-heading #album-title-ja { display: inline-block; }
+@keyframes album-select-sheen { from { transform: translateX(-100%); opacity: 0; } 30% { opacity: .35; } to { transform: translateX(100%); opacity: 0; } }
+@media (max-width: 559px) {
+  .album-selector { margin: 6px 0 8px; padding: 7px 8px; backdrop-filter: blur(1.5px) saturate(1.1); }
+  .album-select-heading h3 { font-size: 11px; letter-spacing: .5px; }
+  .album-select-heading h3 > span { font-size: 9px; }
+  .album-select-navigation { gap: 5px; }
+  .album-tab { padding: 6px 7px; height: 64px; }
+  .album-tab strong { font-size: 12px; }
+  .album-tab-detail { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .album-tab { transition: none; }
+  .album-tab[aria-selected="true"]::after { animation: none; opacity: 0; }
+}
+
+/* CRYSTAL / CLEAR SKY：静的な面とエッジだけを重ね、ぼかし・動くレイヤーは増やしません。 */
+.section-heading, .album-selector {
+  background: linear-gradient(180deg, var(--crystal-top), transparent 18px),
+    linear-gradient(112deg, transparent 55%, var(--crystal-violet) 76%, var(--crystal-pink) 91%, transparent), var(--panel-face);
+  box-shadow: inset 0 2px 0 var(--crystal-rim), inset 2px 0 0 var(--glass-highlight),
+    inset 0 -3px 0 var(--crystal-bevel), inset 0 0 0 4px var(--panel-edge), 0 4px 14px var(--glass-shadow);
+}
+.section-heading { cursor: default; }
+/* 見出しは静的な結晶フレーム。ボタンの浮き上がりやポインターは付けません。 */
+.section-heading::before { height: 2px; background: linear-gradient(90deg, var(--crystal-sky), var(--crystal-rim) 46%, var(--crystal-bevel)); }
+.section-heading::after {
+  border-color: var(--crystal-bevel); border-top-color: var(--crystal-rim);
+  background: linear-gradient(135deg, transparent 45%, var(--crystal-rim) 48% 52%, var(--crystal-violet) 56%, transparent 59%) right top / 28px 28px no-repeat;
+}
+.mode-select .nav-panel {
+  border-top-color: var(--crystal-rim);
+  background: linear-gradient(180deg, var(--crystal-top), transparent 12px),
+    linear-gradient(115deg, transparent 56%, var(--crystal-violet) 78%, var(--crystal-pink) 96%), var(--mode-face);
+  box-shadow: inset 0 2px 0 var(--crystal-rim), inset 2px 0 0 var(--glass-highlight),
+    inset 0 -3px 0 var(--crystal-bevel), inset 0 0 0 3px var(--panel-edge);
+}
+.mode-select .nav-panel::before { height: 2px; background: linear-gradient(90deg, var(--crystal-sky), var(--crystal-rim) 40%, transparent); }
+.album-tab {
+  background: linear-gradient(180deg, var(--crystal-top), transparent 10px),
+    linear-gradient(118deg, transparent 58%, var(--crystal-violet) 85%, var(--crystal-pink)), var(--surface);
+  box-shadow: inset 0 1px 0 var(--crystal-rim), inset 0 -2px 0 var(--crystal-bevel);
+}
+.album-tab[aria-selected="true"] {
+  background: linear-gradient(180deg, var(--crystal-top), transparent 12px),
+    linear-gradient(112deg, var(--cyan-glow), transparent 55%, var(--crystal-violet)), var(--icon-background);
+  box-shadow: inset 0 -3px 0 var(--crystal-sky), inset 0 1px 0 var(--crystal-rim), inset 2px 0 0 var(--accent);
+}
+/* 補助ボタンは細い1pxの反射。サービス色と既存のホバー・タップ効果を保ちます。 */
+.social-link {
+  border-top-color: var(--glass-highlight);
+  background: linear-gradient(180deg, var(--glass-highlight), transparent 4px),
+    linear-gradient(115deg, transparent 76%, var(--crystal-violet)), linear-gradient(110deg, #c7ecf524, #77c5e82b);
+  box-shadow: inset 0 1px 0 var(--crystal-rim), inset 0 -1px 0 var(--crystal-bevel), inset 0 0 0 1px var(--panel-edge);
+}
+.social-icon { border-top: 1px solid var(--glass-highlight); }
+:is(.theme-toggle, .gallery-playback, .gallery-control, .bio-toggle) {
+  background: linear-gradient(180deg, var(--glass-highlight), transparent 4px),
+    linear-gradient(118deg, transparent 80%, var(--crystal-violet)), var(--panel-face);
+  box-shadow: inset 0 1px 0 var(--crystal-rim), inset 0 -1px 0 var(--crystal-bevel), inset 0 0 0 2px var(--panel-edge);
+}
+.gallery-expand { box-shadow: inset 0 1px 0 #efffff80, inset 0 -1px 0 #6ed7ee40; }
+@media (prefers-reduced-motion: reduce) {
+  /* 追加の動きはありません。既存の反射・背景の停止ルールをそのまま使います。 */
+  .section-heading::before, .section-heading::after { animation: none; }
+}
+
+/* PANEL BOOT：原則500ms、上部だけに描く使い切りの装飾。本文と操作面は常に通常表示です。 */
+.panel-boot {
+  position: absolute; z-index: 1; top: 0; left: 0; width: 100%; height: 96px;
+  overflow: hidden; visibility: hidden; pointer-events: none;
+}
+.panel-boot, .panel-boot * { pointer-events: none; }
+.panel-boot > i { position: absolute; display: block; opacity: 0; }
+.is-booting > .panel-boot { visibility: visible; }
+.panel-boot-line {
+  top: 5px; left: 12px; right: 12px; height: 1px; transform-origin: left;
+  background: linear-gradient(90deg, var(--crystal-sky), var(--crystal-rim) 62%, transparent);
+}
+.profile > .panel-boot .panel-boot-line { top: 7px; left: 22px; right: 10px; }
+.panel-boot-ready {
+  top: 14px; left: 52px; width: 154px; height: 20px;
+  background: radial-gradient(ellipse at left center, var(--crystal-top), var(--cyan-glow) 35%, transparent 72%);
+}
+.profile > .panel-boot .panel-boot-ready { top: 16px; left: 22px; }
+.panel-boot-ready::before {
+  content: ""; position: absolute; left: 3px; top: 7px; width: 3px; height: 3px;
+  background: var(--crystal-rim); box-shadow: 0 0 5px var(--crystal-sky); transform: rotate(45deg);
+}
+.panel-boot-facet {
+  top: -25%; left: 0; width: 20%; height: 150%;
+  background: linear-gradient(115deg, transparent 42%, var(--crystal-violet) 46%, var(--crystal-rim) 50%, var(--crystal-pink) 54%, transparent 58%);
+}
+.is-booting > .panel-boot .panel-boot-line { animation: panel-boot-line 180ms ease-out both; }
+.is-booting > .panel-boot .panel-boot-ready { animation: panel-boot-ready 200ms 100ms ease-out both; }
+.is-booting > .panel-boot .panel-boot-facet { animation: panel-boot-facet 240ms 260ms ease-out both; }
+/* aria-hiddenの既存HUDだけをほのかに照らす。文字のopacityや位置は変えません。 */
+.is-booting > .profile-index, .is-booting > .system-label--profile,
+.is-booting > .section-heading > .panel-index, .is-booting > .section-heading > .section-system {
+  animation: panel-boot-hud 200ms 100ms ease-out both;
+}
+@keyframes panel-boot-line {
+  0% { transform: scaleX(.03); opacity: 0; }
+  25% { opacity: .85; }
+  75% { opacity: .9; }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+@keyframes panel-boot-ready {
+  0%, 100% { transform: scaleX(.7); opacity: 0; }
+  45% { transform: scaleX(1); opacity: .65; }
+}
+@keyframes panel-boot-facet {
+  0% { transform: translate3d(-120%, 0, 0); opacity: 0; }
+  30% { opacity: .55; }
+  80% { opacity: .55; }
+  100% { transform: translate3d(620%, 0, 0); opacity: 0; }
+}
+@keyframes panel-boot-hud {
+  0%, 100% { text-shadow: 0 0 0 transparent; }
+  45% { text-shadow: 0 0 5px var(--crystal-sky); }
+}
+@media (max-width: 559px) {
+  .panel-boot { height: 86px; }
+  .panel-boot-ready { left: 42px; width: 120px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel-boot { display: none; }
+  .is-booting > .profile-index, .is-booting > .system-label--profile,
+  .is-booting > .section-heading > .panel-index, .is-booting > .section-heading > .section-system { animation: none; }
 }

@@ -1,34 +1,60 @@
-// 画面に入ったセクションを一度だけ起動する、短い端末風の表示シーケンス。
+// 初回進入の起動演出。本文・ボタン・セクション自体の表示と位置は変更しません。
 (() => {
-  const sections = [...document.querySelectorAll("main > section")];
+  const sections = [...document.querySelectorAll("#profile, #network, #photo-gallery, #work-archive")];
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const seen = new WeakSet();
+  const observers = new Map();
   const timers = new Map();
-  let observer;
+
+  sections.forEach((section) => {
+    const layer = document.createElement("span");
+    layer.className = "panel-boot";
+    layer.setAttribute("aria-hidden", "true");
+    ["line", "ready", "facet"].forEach((part) => {
+      const decoration = document.createElement("i");
+      decoration.className = "panel-boot-" + part;
+      layer.append(decoration);
+    });
+    section.append(layer);
+    layer.lastElementChild.addEventListener("animationend", (event) => {
+      if (event.animationName === "panel-boot-facet") finish(section);
+    });
+  });
 
   function finish(section) {
     clearTimeout(timers.get(section));
     timers.delete(section);
-    section.classList.remove("is-entering");
+    section.classList.remove("is-booting");
     section.classList.add("is-revealed");
   }
 
   function configure() {
-    observer?.disconnect();
+    observers.forEach((observer) => observer.disconnect());
+    observers.clear();
     if (reducedMotion.matches || !("IntersectionObserver" in window)) {
       sections.forEach((section) => { seen.add(section); finish(section); });
       return;
     }
-    observer = new IntersectionObserver((entries) => {
-      entries.forEach(({ target, isIntersecting }) => {
-        if (!isIntersecting || seen.has(target)) return;
-        seen.add(target);
-        observer.unobserve(target);
-        target.classList.add("is-entering");
-        timers.set(target, setTimeout(() => finish(target), 600));
-      });
-    }, { threshold: 0, rootMargin: "0px 0px -48px 0px" });
-    sections.filter((section) => !seen.has(section)).forEach((section) => observer.observe(section));
+    const viewportHeight = document.documentElement.clientHeight || window.innerHeight;
+    sections.filter((section) => !seen.has(section)).forEach((section) => {
+      // 小さいパネルは20%、大きいパネルは最大96pxほど見えたら起動します。
+      // 寸法は設定時に一度だけ読み、スクロールイベントで計算しません。
+      const height = Math.max(1, section.getBoundingClientRect().height);
+      const threshold = Math.min(0.2, Math.min(96, viewportHeight * 0.14) / height);
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(({ target, isIntersecting, intersectionRatio }) => {
+          if (!isIntersecting || intersectionRatio + 0.0001 < threshold || seen.has(target)) return;
+          seen.add(target);
+          observer.disconnect();
+          observers.delete(target);
+          target.classList.add("is-booting");
+          // CSSは500msで終了。背景タブなどでanimationendが来ない場合の後始末です。
+          timers.set(target, setTimeout(() => finish(target), 550));
+        });
+      }, { threshold: [threshold], rootMargin: "0px 0px -24px 0px" });
+      observers.set(section, observer);
+      observer.observe(section);
+    });
   }
 
   reducedMotion.addEventListener("change", configure);

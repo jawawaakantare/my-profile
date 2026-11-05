@@ -1,8 +1,4 @@
-// 写真数の表示だけ更新します。カルーセルの移動や操作には触れません。
-galleryAlbums.forEach((album) => {
-  const count = document.querySelector(`#${album.id} [data-photo-count]`);
-  if (count) count.textContent = `${album.photos.length} IMAGES`;
-});
+// 写真枚数はscript.jsのアルバム選択処理が更新します。
 
 // 独立した連続ループのトラックを包み、スクロールの微小な奥行きだけ合成します。
 (() => {
