@@ -241,12 +241,6 @@ footer small { color: var(--muted); font-size: 10px; }
 .gallery-stage:focus-visible, .gallery-photo:focus-visible, .gallery-control:focus-visible, .gallery-playback:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
 .gallery-hint { margin: 6px 0 0; color: var(--muted); font-size: 11px; }
 #gallery-status { margin: 0; }
-.photo-dialog { width: min(96vw, 1440px); max-width: 96vw; max-height: 96vh; max-height: 96dvh; padding: 56px 16px 16px; overflow: auto; border: 1px solid var(--border); border-radius: 8px; background: var(--gallery-background); color: var(--text); }
-.photo-dialog::backdrop { background: #000000e6; }
-.photo-dialog img { display: block; width: 100%; height: min(72vh, 1000px); height: min(72dvh, 1000px); object-fit: contain; }
-.photo-dialog p { margin: 12px 0 0; text-align: center; font-size: 13px; overflow-wrap: anywhere; }
-.dialog-close { position: absolute; top: 8px; right: 8px; font-size: 22px; }
-body.photo-open { overflow: hidden; }
 /* 小さい画面でも複数の写真と、次の写真の端が見える高さにします。 */
 @media (max-width: 559px) {
   .gallery-stage { --photo-height: clamp(140px, 40vw, 180px); --photo-gap: 12px; }
@@ -371,7 +365,7 @@ body.photo-open { overflow: hidden; }
 /* View Transitions対応ブラウザーでは背景のグラデーションも一緒にクロスフェード。 */
 ::view-transition-old(root), ::view-transition-new(root), ::view-transition-group(root) { animation-duration: .28s; animation-timing-function: ease-in-out; }
 /* その他のブラウザーでも、主要な面と文字の配色を穏やかに切り替えます。 */
-body, .site-header, .wordmark, .header-note, .profile-nickname, .bio, .eyebrow, .nav-panel, .section-heading h2, .section-caption, .section-description, .link-label > span, .link-arrow, .gallery, .gallery-card figcaption, .gallery-hint, .photo-dialog, footer, footer small { transition: color .28s, background-color .28s, border-color .28s; }
+body, .site-header, .wordmark, .header-note, .profile-nickname, .bio, .eyebrow, .nav-panel, .section-heading h2, .section-caption, .section-description, .link-label > span, .link-arrow, .gallery, .gallery-card figcaption, .gallery-hint, footer, footer small { transition: color .28s, background-color .28s, border-color .28s; }
 .social-link { transition: transform .2s, border-color .28s, box-shadow .28s, background-color .28s, color .28s; }
 .work-card { transition: border-color .28s, box-shadow .28s, background-color .28s, color .28s; }
 .gallery-control, .gallery-playback { transition: border-color .28s, box-shadow .28s, background-color .28s, color .28s; }

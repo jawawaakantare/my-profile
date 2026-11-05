@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="ambient.css">
   <link rel="stylesheet" href="profile-layout.css">
   <script src="albums.js" defer></script>
+  <script src="viewer.js" defer></script>
   <script src="script.js" defer></script>
   <script src="details.js" defer></script>
   <script src="navigation.js" defer></script>
@@ -227,10 +228,26 @@
     <footer><div class="footer-hud" aria-hidden="true"><span><i class="micro-diamond"></i> END OF STREAM</span><span>FLOW : NORMAL / NODE CONNECTED</span></div><p>Thanks for visiting jawawa's corner<span> ✳</span></p><p class="system-label system-label--footer" aria-hidden="true"><i class="status-light"></i> SYSTEM STATUS // ONLINE</p><small>© <span id="year">2026</span> Jawawa</small></footer>
   </div>
   <!-- Escキーや閉じるボタンで閉じる、写真の拡大表示です。 -->
-  <dialog class="photo-dialog" id="photo-dialog" aria-label="友ヶ島の写真を拡大表示">
-    <button class="gallery-control dialog-close" id="photo-close" type="button" aria-label="拡大表示を閉じる" autofocus>×</button>
-    <img id="photo-enlarged" src="assets/gallery/tomogashima/1000003477.jpg" alt="友ヶ島のアーチ型の天井と、壁に差し込む光">
-    <p id="photo-enlarged-caption"></p>
+  <dialog class="photo-viewer" id="photo-dialog" aria-labelledby="viewer-title">
+    <header class="viewer-header">
+      <div class="viewer-info">
+        <h2 id="viewer-title">DIGITAL PHOTO VIEWER</h2>
+        <div class="viewer-meta"><span>ALBUM // <strong id="viewer-album"></strong></span><span>FIELD DATE // <span id="viewer-date"></span></span></div>
+      </div>
+      <button class="gallery-control dialog-close" type="button" aria-label="ビューアーを閉じる" autofocus>×</button>
+    </header>
+    <div class="viewer-stage">
+      <p class="viewer-error" hidden>写真を読み込めませんでした。前後のボタンで別の写真を表示できます。</p>
+    </div>
+    <button class="gallery-control viewer-prev" type="button" aria-label="前の写真">←</button>
+    <footer class="viewer-footer">
+      <div class="viewer-readout">
+        <p id="viewer-count" aria-live="polite" aria-atomic="true"></p>
+        <p id="photo-enlarged-caption"></p>
+        <p id="viewer-status" role="status"></p>
+      </div>
+    </footer>
+    <button class="gallery-control viewer-next" type="button" aria-label="次の写真">→</button>
   </dialog>
 </body>
 </html>

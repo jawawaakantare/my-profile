@@ -154,7 +154,6 @@ h1 { font-size: clamp(28px, 5vw, 38px); }
 .gallery-stage, .gallery-photo, .gallery-expand { border-radius: 0; }
 .gallery-toolbar { padding-top: 10px; border-top: 1px solid var(--frame-soft); }
 .gallery-control, .gallery-playback { border-radius: 0; font-size: 12px; border-color: var(--cyan-border); background: var(--metal-strip); clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px); }
-.photo-dialog { border-radius: 0; background: var(--gallery-background); border-color: var(--cyan-border); }
 
 /* WORK ARCHIVE: 非対称のタブを持つ、薄いファイルパネル。 */
 .works-grid { gap: 12px; position: relative; }
@@ -603,4 +602,70 @@ footer::before { left: 10%; background: var(--surface); border-color: var(--cyan
   .panel-boot { display: none; }
   .is-booting > .profile-index, .is-booting > .system-label--profile,
   .is-booting > .section-heading > .panel-index, .is-booting > .section-heading > .section-system { animation: none; }
+}
+
+/* DIGITAL PHOTO VIEWER：HUDは写真の外に置き、写真の色と縦横比を保ちます。 */
+:root.photo-viewing { overflow: hidden; scrollbar-gutter: stable; }
+.photo-viewing body { position: fixed; inset: var(--viewer-scroll-y) 0 auto; width: 100%; overflow: hidden; }
+.photo-viewer {
+  --viewer-panel: #def3ffe8; --viewer-ink: #102d43; --viewer-muted: #304c64;
+  --viewer-edge: #6bc5e4; --viewer-accent: #095b78; --viewer-prism: #b49aef32;
+  --viewer-highlight: #f7fdffe6; --viewer-bevel: #53a9cc65;
+  --viewer-button: linear-gradient(145deg, #eefafff0, #a4d8eedb);
+  position: fixed; inset: 0; margin: 0; border: 0; padding: 0;
+  width: 100%; max-width: none; height: 100vh; height: 100dvh; max-height: none;
+  overflow: hidden; overscroll-behavior: contain; background: #0d1721; color: var(--viewer-ink);
+}
+:root[data-theme="dark"] .photo-viewer {
+  --viewer-panel: #16354dcc; --viewer-ink: #f2faff; --viewer-muted: #bbd4e6;
+  --viewer-edge: #64c8e5; --viewer-accent: #a3e9ff; --viewer-prism: #b49aef24;
+  --viewer-highlight: #c4efff82; --viewer-bevel: #489ac170;
+  --viewer-button: linear-gradient(145deg, #335c76d9, #183347dc);
+  background: #07111d;
+}
+.photo-viewer[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+.photo-viewer::backdrop { background: #000e; }
+.viewer-header, .viewer-footer {
+  margin: 0; min-width: 0;
+  padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right));
+  background: linear-gradient(180deg, var(--viewer-highlight), transparent 4px),
+    linear-gradient(115deg, transparent 58%, var(--viewer-prism) 88%, transparent), var(--viewer-panel);
+  box-shadow: inset 0 1px 0 var(--viewer-highlight), inset 0 -2px 0 var(--viewer-bevel);
+  clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 9px 100%, 0 calc(100% - 9px));
+}
+.viewer-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-block: max(5px, env(safe-area-inset-top)) 5px; border-bottom: 1px solid var(--viewer-edge); }
+.viewer-info { min-width: 0; }
+.viewer-header h2 { margin: 0 0 4px; color: var(--viewer-ink); font: 600 12px/1.35 ui-monospace, Consolas, monospace; letter-spacing: .11em; }
+.viewer-meta { display: flex; flex-wrap: wrap; gap: 2px 16px; color: var(--viewer-muted); font: 11px/1.45 ui-monospace, Consolas, monospace; overflow-wrap: anywhere; }
+.viewer-meta strong { color: var(--viewer-ink); font-weight: 600; }
+.viewer-stage { position: relative; min-width: 0; min-height: 0; display: grid; place-items: center; overflow: hidden; touch-action: pan-y pinch-zoom; }
+.viewer-stage > img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+.viewer-error { margin: 16px; text-align: center; color: #d6eaf8; font-size: 14px; }
+.viewer-footer { display: grid; align-items: center; min-height: calc(53px + env(safe-area-inset-bottom)); padding-block: 4px max(4px, env(safe-area-inset-bottom)); padding-inline: max(66px, calc(env(safe-area-inset-left) + 54px)) max(66px, calc(env(safe-area-inset-right) + 54px)); border-top: 1px solid var(--viewer-edge); backdrop-filter: none; }
+.viewer-footer::before { display: none; }
+.viewer-readout { position: relative; min-width: 0; text-align: center; }
+.viewer-readout p { margin: 0; }
+#viewer-count { color: var(--viewer-accent); font: 600 12px/1.4 ui-monospace, Consolas, monospace; letter-spacing: .1em; }
+#photo-enlarged-caption { color: var(--viewer-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
+.photo-viewer #viewer-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.photo-viewer .gallery-control {
+  flex: none; width: 48px; height: 44px; min-width: 44px; min-height: 44px; padding: 5px;
+  border-color: var(--viewer-edge); color: var(--viewer-ink); background: var(--viewer-button);
+  box-shadow: inset 0 1px 0 var(--viewer-highlight), inset 0 -2px 0 var(--viewer-bevel); font-size: 19px;
+}
+.photo-viewer .gallery-control:focus-visible { outline-color: var(--viewer-accent); }
+.photo-viewer :is(.viewer-prev, .viewer-next) { position: absolute; z-index: 1; bottom: calc(4px + env(safe-area-inset-bottom)); }
+.photo-viewer .viewer-prev { left: max(12px, env(safe-area-inset-left)); }
+.photo-viewer .viewer-next { right: max(12px, env(safe-area-inset-right)); }
+.photo-viewer.viewer-side-nav :is(.viewer-prev, .viewer-next) { top: calc(var(--viewer-stage-center) - 22px); bottom: auto; }
+@media (hover: hover) and (pointer: fine) {
+  .photo-viewer .gallery-control:not(:disabled):hover {
+    background: linear-gradient(115deg, #72dfff42, transparent 72%), var(--viewer-button);
+    box-shadow: inset 0 1px 0 var(--viewer-highlight), inset 0 -2px 0 var(--viewer-bevel), 0 0 10px #63dafa30;
+  }
+}
+@media (max-width: 559px), (max-height: 450px) {
+  .viewer-header { padding-block: max(5px, env(safe-area-inset-top)) 5px; }
+  .viewer-header h2 { font-size: 11px; margin-bottom: 2px; }
+  .viewer-meta { font-size: 10px; }
 }

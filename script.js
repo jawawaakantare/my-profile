@@ -114,9 +114,7 @@ function initializeAlbumSelect() {
       }
       panel.querySelector(".gallery-track").replaceChildren(...(album.photos.length ? [fallback] : []));
       panel.querySelector(".gallery-playback").disabled = true;
-      const dialog = document.getElementById("photo-dialog");
-      dialog.setAttribute("aria-label", album.titleJa + "の写真を拡大表示");
-      await initializeGallery(panel, album.photos, dialog, signal);
+      await initializeGallery(panel, album, signal);
       if (request !== version || signal.aborted) return;
       panel.dataset.loading = "false";
       // 読み込み中は選択パネルのフォーカスを維持し、新しい写真へ勝手に移動しません。
@@ -147,13 +145,13 @@ function initializeAlbumSelect() {
   }
 }
 
-async function initializeGallery(gallery, photoList, dialog, signal) {
+async function initializeGallery(gallery, album, signal) {
+  const photoList = album.photos;
   // 検索範囲と再生状態をアルバム内に閉じ、別アルバムの操作と混ざらないようにします。
   const stage = gallery.querySelector(".gallery-stage");
   const track = gallery.querySelector(".gallery-track");
   const playback = gallery.querySelector(".gallery-playback");
   const status = gallery.querySelector("[role='status']");
-  const enlarged = dialog.querySelector("img");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const loopSeconds = 50; // 写真列が1周する秒数。40〜60秒を目安に調整できます。
   const resumeDelay = 3000;
@@ -167,7 +165,6 @@ async function initializeGallery(gallery, photoList, dialog, signal) {
   let resumeAfter = 0;
   let pointer = null;
   let suppressClickUntil = 0;
-  let returnFocus = null;
   let resizeObserver;
   let visibilityObserver;
   function listen(target, type, callback) {
@@ -182,8 +179,7 @@ async function initializeGallery(gallery, photoList, dialog, signal) {
     pointer = null;
     if (captured !== undefined && stage.hasPointerCapture(captured)) stage.releasePointerCapture(captured);
     stage.classList.remove("is-dragging");
-    if (dialog.open) dialog.close();
-    document.body.classList.remove("photo-open");
+    photoViewer.close(false);
     track.style.transform = "";
   }, { once: true });
 
@@ -388,26 +384,19 @@ async function initializeGallery(gallery, photoList, dialog, signal) {
   listen(stage, "click", (event) => {
     const button = event.target.closest(".gallery-photo");
     if (!button || performance.now() < suppressClickUntil) return;
-    const photo = photos[Number(button.dataset.index)];
-    returnFocus = button;
+    const index = Number(button.dataset.index);
     pause("dialog", true);
-    enlarged.src = photo.image.src;
-    enlarged.alt = photo.image.alt;
-    dialog.querySelector("p").textContent = photo.caption;
-    dialog.showModal();
-    document.body.classList.add("photo-open");
-  });
-  listen(dialog.querySelector(".dialog-close"), "click", () => dialog.close());
-  listen(dialog, "click", (event) => {
-    if (event.target !== dialog) return;
-    const bounds = dialog.getBoundingClientRect();
-    if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
-  });
-  listen(dialog, "close", () => {
-    document.body.classList.remove("photo-open");
-    if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
-    else stage.focus({ preventScroll: true });
-    pause("dialog", false, true);
+    photoViewer.open(album, index, () => {
+      // 画面回転などで写真列を再生成していても、同じ写真へ戻します。
+      const bounds = stage.getBoundingClientRect();
+      const replacement = [...track.querySelectorAll(`.gallery-photo[data-index="${index}"]`)].find((candidate) => {
+        const rect = candidate.getBoundingClientRect();
+        return rect.right > bounds.left && rect.left < bounds.right;
+      });
+      const target = button.isConnected ? button : replacement || stage;
+      target.focus({ preventScroll: true });
+      pause("dialog", false, true);
+    });
   });
   listen(document, "visibilitychange", () => pause("hidden", document.hidden));
   pause("hidden", document.hidden);
